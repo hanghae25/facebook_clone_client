@@ -45,7 +45,9 @@ const Grid = (props) => {
     margin: false,
     bg: false,
     center: false,
+    
     _onClick: () => {},
+
   };
   
   const GridBox = styled.div`

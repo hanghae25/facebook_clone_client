@@ -38,17 +38,12 @@ const Reply=(props)=> {
             </Grid>
 
             <Line style={{ margin: "6px auto" }}/>
+
             <Grid flex>
                 <LikePoint/>
                 <Text margin="7px" bold>XXX님 외, 10명</Text>
             </Grid>
-            <Line/>
 
-            <Grid flex>  
-                <Image shape="circle" src={props.src} />
-                <ReplyInput placeholder= "  댓글을 입력하세요." ></ReplyInput>
-                <PlusReplyButton>게시</PlusReplyButton>  
-            </Grid>           
             <Line/>
 
             <Grid flex>  
@@ -56,6 +51,20 @@ const Reply=(props)=> {
                 <ReplyView/> 
             </Grid>
             <p style={{fontSize:"12px", margin: "auto 50px"}}> 좋아요       답글 달기      더 보기</p>
+            <Grid flex>  
+                <Image shape="circle" src={props.src} />
+                <ReplyView/> 
+            </Grid>
+            <p style={{fontSize:"12px", margin: "auto 50px"}}> 좋아요       답글 달기      더 보기</p>
+
+            <Line/>
+
+            <Grid flex>  
+                <Image shape="circle" src={props.src} />
+                <ReplyInput placeholder= "  댓글을 입력하세요." ></ReplyInput>
+                <PlusReplyButton>게시</PlusReplyButton>  
+            </Grid>   
+
         </React.Fragment>
     );
 };
@@ -67,9 +76,6 @@ const Header = styled.div`
     margin-top: -17px;
 `; 
 
-const Center = styled.div`
-    text-align: center;
-`;
 
 const Title = styled.p`
     color: white;
