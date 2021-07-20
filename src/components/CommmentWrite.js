@@ -1,5 +1,5 @@
-import React from "react";
 
+import React from "react";
 import {Image, Grid} from "../elements";
 import styled from "styled-components";
 
@@ -10,7 +10,10 @@ const CommentWrite = (props) => {
             <Grid flex>
                 <Image shape="circle" src={props.src} />
                 <ReplyInput placeholder= "  댓글을 입력하세요." ></ReplyInput>
-                <PlusReplyButton>게시</PlusReplyButton>  
+                <PlusReplyButton 
+                     onClick={() => {
+                        history.push("/signup");
+                      }>게시</PlusReplyButton>  
             </Grid>
         </React.Fragment>
     );

@@ -1,17 +1,18 @@
-import firebase from "firebase/app";
-import "firebase/storage";
+// import firebase from 'firebase/app';
+// import 'firebase/storage';
 
-const firebaseConfig = {
-  // apiKey: "AIzaSyA7BCvhCvBfkP-qOXhwtqKI_ctaGOGgY_E",
-  // authDomain: "pet-hospital-booking-service.firebaseapp.com",
-  // projectId: "pet-hospital-booking-service",
-  // storageBucket: "pet-hospital-booking-service.appspot.com",
-  // messagingSenderId: "338018173069",
-  // appId: "1:338018173069:web:4710237788c0736be762c4",
-};
+// const firebaseConfig = {
+//   apiKey: process.env.REACT_APP_API_KEY,
+//   authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+//   projectId: process.env.REACT_APP_PROJECT_ID,
+//   storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
+//   messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
+//   appId: process.env.REACT_APP_APP_ID,
+//   measurementId: process.env.REACT_APP_MEASUREMENT_ID,
+// };
 
-firebase.initializeApp(firebaseConfig);
+// firebase.initializeApp(firebaseConfig);
 
-const storage = firebase.storage();
+// const storage = firebase.storage();
 
-export { storage };
+// export { storage };

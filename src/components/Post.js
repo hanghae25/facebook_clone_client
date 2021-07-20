@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 
 import HeartButton from './HeartButton';
-
+import { actionCreators as postActions } from '../redux/modules/post';
 // import Carousel from 'react-gallery-carousel';
 // import 'react-gallery-carousel/dist/index.css';
 

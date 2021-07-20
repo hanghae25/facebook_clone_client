@@ -5,9 +5,9 @@ import { Text, Grid } from "./index";
 
 // 인풋 컴포넌트
 /**
- * 
- * @param {*} props 
- * - label 인풋 박스 위에 넣어줄 텍스트 
+ *
+ * @param {*} props
+ * - label 인풋 박스 위에 넣어줄 텍스트
  * - placeholder 인풋 박스에 미리 넣어줄 텍스트
  * - _onChange 인풋에 들어갈 값(text, file 등)이 변경되면 실행할 함수
  * - type 인풋 박스의 타입 (file, text 등)
@@ -15,7 +15,7 @@ import { Text, Grid } from "./index";
  * - value 인풋 박스의 값
  * - is_submit 엔터키 이벤트를 줄지 말지 여부 boolean
  * - onSubmit 엔터키 이벤트에서 실행할 함수(onKeyPress 이벤트를 사용해요!)
- * @returns 
+ * @returns
  */
 const Input = (props) => {
   const {
@@ -81,7 +81,7 @@ Input.defaultProps = {
 const ElTextarea = styled.textarea`
   width: 86%;
   height: 50px;
-  background-color: #F5F6F7;
+  background-color: #f5f6f7;
   border: none;
   // boder-color: 1px solid gray;
   border-radius: 5px;
@@ -92,11 +92,14 @@ const ElTextarea = styled.textarea`
 const ElInput = styled.input`
   width: 86%;
   height: 50px;
-  background-color: #F5F6F7;
+  background-color: #f5f6f7;
   border: none;
   border-radius: 5px;
   display: block;
   margin: 8px auto;
+  box-sizing: border-box;
+  padding-left: 15px;
+  outline: none;
 `;
 
 export default Input;

@@ -16,7 +16,9 @@ const CommentList = (props) => {
   React.useEffect(() => {
     if(!comment_list[post_id]){
       // 코멘트 정보가 없으면 불러오기
-      dispatch(commentActions.getCommentFB(post_id));
+      // dispatch(commentActions.getCommentDB(post_id));
+
+      console.log(comment_list)
     }
   }, []);
 
@@ -44,17 +46,17 @@ export default CommentList;
 
 const CommentItem = (props) => {
 
-    const {user_profile, username, post_id, contents, insert_dt} = props;
+    
     return (
         <Grid is_flex>
             <Grid is_flex width="auto">
                 <Image shape="circle" src={props.src}/>
-                <Text bold>{username}</Text>
+                <Text bold>{props.username}</Text>
             </Grid>
             <Grid is_flex margin="0px 4px">
                 <ReplyView>
-                <Text margin="0px">{contents}</Text>
-                <Text margin="0px">{insert_dt}</Text>
+                <Text margin="0px">{props.contents}</Text>
+                <Text margin="0px">{props.insert_dt}</Text>
                 </ReplyView>
             </Grid>
         </Grid>
@@ -67,7 +69,7 @@ CommentItem.defaultProps = {
     user_id: "",
     post_id: 1,
     contents: "페이스북 클론코딩",
-    insert_dt: '2021-01-01 19:00:00'
+    insert_dt: '2021-01-01 00:00:00'
 }
 
 const ReplyView = styled.div`
@@ -78,5 +80,6 @@ const ReplyView = styled.div`
     border-radius: 15px;
     margin-left: 10px;
 `;
+
 
 
