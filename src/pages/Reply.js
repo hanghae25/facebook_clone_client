@@ -1,6 +1,7 @@
 import React from "react";
 import {  HeadearColor } from "../common_css/style";
 import { Image, Grid, Text } from "../elements";
+import { history } from "../redux/configureStore";
 
 import { useDispatch, useSelector } from "react-redux";
 import { actionCreators as postActions } from "../redux/modules/post";
@@ -37,9 +38,17 @@ const Reply=(props)=> {
 
         <React.Fragment>
         
-            <Header style={{display:"flex",}}>
-                <arrowButton><img src={arrow_icon} alt="arrow" width="10%"></img></arrowButton>
+            <Header>
+                <arrowButton
+                 onClick={() => {
+                  history.goBack();
+                }}
+                >
+                <img src={arrow_icon} alt="arrow" width="30px"/></arrowButton>
+              
                 <Title>글 제목</Title>
+                <Center/>
+                
             </Header>
 
             <Grid flex>   
@@ -52,8 +61,15 @@ const Reply=(props)=> {
             <Line style={{width:"95%", size : "4px", margin: "22px auto 3px auto" }}/>
 
             <Grid center is_flex>
-                <LikeButton ><img src={thumb_before} alt="likeit" width="18%"/>좋아요</LikeButton> 
-                <ReplyButton><img src={text_ballloon} alt="reply" width="18%"/>댓글달기</ReplyButton>
+                <LikeButton >
+                  <img src={thumb_before} alt="likeit" width="20px%"/>
+                  좋아요
+                  </LikeButton>
+
+                <ReplyButton>
+                  <img src={text_ballloon} alt="reply" width="20px"/>
+                  댓글달기
+                </ReplyButton>
             </Grid>
 
             <Line style={{ margin: "6px auto" }}/>
@@ -65,37 +81,38 @@ const Reply=(props)=> {
 
             <Line/>
 
-
-            {/* <Grid flex>  
-                <Image shape="circle" src={props.src} />
-                <ReplyView/> 
-            </Grid> */}
             <p style={{fontSize:"12px", margin: "auto 50px"}}> 좋아요       답글 달기      더 보기</p>
-            {/* <Grid flex>  
-                <Image shape="circle" src={props.src} />
-                <ReplyView/> 
-            </Grid> */}
+
 
             <CommentList/>
             <Line/>
+
             <CommentWrite/>
 
         </React.Fragment>
     );
 };
 
+const Center = styled.div`
+  margin: 0px;
+  width: 30px;
+  height: 30px;
+`;
+
 const Header = styled.div`
   width: 100%;
   height: 45px;
   ${HeadearColor}
-  margin-top: -17px;
+  // margin-top: px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 const arrowButton = styled.button`
-  margin: 10px auto;
-  width: 15px;
-  height: 15px;
-  // background-img: ${arrow_icon}
+  
+  width: 30px;
+  height: 30px;
 `;
 
 const Title = styled.p`
@@ -116,13 +133,6 @@ const Line = styled.hr`
   boder: 1px solid #d2d2d2;
 `;
 
-const ReplyInput = styled.input`
-  width: 69%;
-  height: 40px;
-  border-radius: 30px;
-  border: 1px solid grey;
-  margin-left: 10px;
-`;
 
 const PlusReplyButton = styled.button`
   margin: auto 10px auto 10px;
@@ -134,14 +144,6 @@ const PlusReplyButton = styled.button`
   color: grey;
 `;
 
-const ReplyView = styled.div`
-  width: 50%;
-  height: 50px;
-  background-color: #dcdcdc;
-  border: none;
-  border-radius: 15px;
-  margin-left: 10px;
-`;
 
 const LikePoint = styled.div`
   width: 18px;

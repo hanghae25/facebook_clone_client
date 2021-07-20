@@ -33,7 +33,8 @@ const loginAPI = (emailAddress, password) => {
         instance.post("user/login", user_login)
                 .then((result)=>{
                     console.log(result);
-                    const accessToken = result.data; // API 요청하는 콜마다 해더에 accessTocken 담아 보내도록 설정 
+                    const accessToken = result.data; 
+                    // API 요청하는 콜마다 해더에 accessTocken 담아 보내도록 설정 
                     instance.defaults.headers.common["Authorization"] = `${accessToken}`;
                     setCookie("token", accessToken, 1, "/");
                     dispatch(setUser({
@@ -83,7 +84,7 @@ const loginCheck = () => {
       instance.defaults.headers.common["Authorization"] = `${token}`;
       dispatch(
         // logIn({
-          // username: decoded.sub,
+        //   username: decoded.sub,
         // })
       );
     }

@@ -1,94 +1,114 @@
 import { createAction, handleActions } from "redux-actions";
 import {produce} from "immer";
 
-import instance from "../../shared/config";
-import { setCookie, deleteCookie } from "../../shared/Cookie";
+// import instance from "../../shared/config";
+// import { setCookie, deleteCookie } from "../../shared/Cookie";
 import moment from "moment";
+
+import axios from "axios"; // import 해오것으로 나중에 변경하기
 
 // actions
 const SET_COMMENT = "SET_COMMENT";
 const ADD_COMMENT = "ADD_COMMENT";
 
-const DELETE_COMMENT = "DELETE_COMMENT" 
-
-const LOADING = "LOADING";
-
 // action craetors
 const setComment = createAction(SET_COMMENT, (post_id, comment_list)=>({post_id, comment_list}));
 const addComment = createAction(ADD_COMMENT, (post_id, comment)=>({post_id, comment}));
 
-const deleteComment = createAction(DELETE_COMMENT, (post_id, comment_)=>({}))
-
 // initialState
 const initialState = {
-    comments: [],
-    is_loading: false,
+    list: [{
+        content: "페이스북 클론코딩",
+        image: "https://scontent-gmp1-1.xx.fbcdn.net/v/t1.30497-1/p160x160/143086968_2856368904622192_1959732218791162458_n.png?_nc_cat=1&ccb=1-3&_nc_sid=7206a8&_nc_ohc=r2DZdUdfmL8AX9UnLJE&tn=tQAeeEesgp3mQZ73&_nc_ht=scontent-gmp1-1.xx&oh=a57372edf02002d81ec77f6b09103dbd&oe=60F79ED8",
+        insert_dt: moment().format("YYYY년 MM월 DD일 hh:mm:ss"),
+    }],
+    content: null,
 };
 
-// const getCommentDB = (post_id = null) => {
-//     return function(dispatch, getState, {history}){
-//         // post_id  없으면 바로 리턴
-//         if(!post_id){
-//             return;
-//         } 
-//         instance
-//         .where("post_id", "==", post_id)
-//         .orderBy("insert_dt","desc")
-//         .get("/user/comment/{username}/{articleId}")
-//         .then((docs)=>{
-//             let list = [];
-//             docs.forEach((doc)=>{
-//                 list.push({ ...doc.data(), id: doc.id });
-//             });
-//             dispatch(setComment(post_id,list));
-//         }).catch(err =>{
-//             console.log("댓글 가져오기 실패", post_id, err);
-//         });
-    
-//     }
-// }
 
-const addCommentAPI = (post_id, contents) =>{
-    return function (dispatch, getState, {history}) {
+const setCommentAPI = () => {
+    return function(dispatch, getState, {history}){
+        axios({
+            url: 'http://13.124.141.66/user/comment/kim/1',
+            method: 'get',
+            // data: {},
+            headers: { 
+                "Content-Type": "multipart/form-data",
+                "Access-Control-Allow-Origin": "*",
+                "Authorization": `Bearer ${sessionStorage.getItem("token")};`,
+            },
+        }).then((response) => {
+          console.log(response.data);
+          dispatch(setComment(response.data));
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    };
+  };
 
-        const user_info = getState().user.user;
-        
-        let comment = {
-            post_id: post_id,
-            emailAddress: user_info.emailAddress,
-            user_name: user_info.username,
-            user_profile: user_info.user_profile,
-            contents: contents,
-            insert_dt: moment().format("YYYY-MM-DD hh:mm:ss"),
+
+const addCommentAPI = (content) =>{
+    return function (dispatch, ) {
+
+        const formData = new FormData(); 
+        FormData.append("content", content);
+
+        const options = {
+            url:  "http://13.124.141.66/user/comment",
+            method: "POST",
+            headers: {
+                "Content-Type": "multipart/form-data",
+                "Access-Control-Allow-Origin": "*",
+                "Authorization": `Bearer ${sessionStorage.getItem("token")};`,
+            },
+            data: formData,
         }
 
-        instance
-        .post("/user/comment")
+        axios(options)
+        .then((response,{history}) => {
+          console.log(response.data);
+          // 방금 업데이트 된 포스트 정보를 받아 정리한다.
+          let content_data = {
+            content: response.data.content_list.content
+          };
+
+          console.log(content_data, content);
+          // 리덕스 상태 업데이트
+          dispatch(addComment(content_data));
+          history.push("/comment");
+        })
+        .catch((error) => {
+          console.log(error);
+          if (error.response) {
+            window.alert(error.response.data.errorMessage);
+          }
+        });
+    };
+  };
+
+    // reducer
+    export default handleActions(
+        {
+            [SET_COMMENT]: (state, action) => produce(state, (draft) => {
+                draft.list = action.payload.content_list;
+            }),
+    
+            [ADD_COMMENT]: (state, action) => produce(state, (draft) => {
+                draft.list.unshift(action.payload.content);
+            })
+        },
+        initialState
+    );
+
+  // action creator export
+    const actionCreators = {
+        setComment,
+        addComment,
+        addCommentAPI,
+        setCommentAPI,
+
+    };
+    
+export { actionCreators };
         
-    }
-}
-
-
-
-export default handleActions(
-  {
-      [SET_COMMENT]: (state, action) => produce(state, (draft) => {
-            draft.list[action.payload.post_id] = action.payload.comment_list;
-      }),
-      [ADD_COMMENT]: (state, action) => produce(state, (draft)=>{
-            
-      }),
-      [LOADING]: (state, action) => produce(state, (draft)=>{
-          draft.is_loading = action.payload.is_loading;
-      })
-  },
-  initialState  
-);
-
-const actionCreators ={
-    // getCommentDB,
-    setComment,
-    addComment,
-}
-
-export  {actionCreators};
