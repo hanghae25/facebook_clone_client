@@ -3,8 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@date-io/date-fns": "1.x",
     "@material-ui/core": "^4.12.1",
     "@material-ui/icons": "^4.11.2",
+    "@material-ui/pickers": "^3.3.10",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
@@ -14,8 +16,11 @@
     "react-gallery-carousel": "^0.2.3",
     "connected-react-router": "^6.9.1",
     "immer": "^9.0.5",
+    "jwt-decode": "^3.1.2",
     "react": "^17.0.2",
+    "react-core-loading-spinner": "^1.0.2",
     "react-dom": "^17.0.2",
+    "react-loader-spinner": "^4.0.0",
     "react-redux": "^7.2.4",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
@@ -30,7 +35,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "server": "json-server --watch data.json --port 4000 --routes route.json"
   },
   "eslintConfig": {
     "extends": [
