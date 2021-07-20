@@ -12,7 +12,8 @@ const DELETE_POST = "DELETE_POST";
 const setMyPost = createAction(SET_MY_POST, (post_list) => ({ post_list }));
 const setAllPost = createAction(SET_ALL_POST, (post_list) => ({ post_list }));
 
-const likeToggle = createAction(LIKE_TOGGLE, (post_id, is_like = null) => ({
+const likeToggle = createAction(LIKE_TOGGLE, (post, post_id) => ({
+  post,
   post_id,
 }));
 const deletePost = createAction(DELETE_POST, (post_id) => ({ post_id }));
@@ -68,8 +69,12 @@ const deletePostDB = (articleId) => {
 };
 const toggleLikeDB = (post_id) => {
   return function (dispatch, getState) {
-    const _idx = getState().post.list.findIndex((p) => p.id === post_id);
-    let _post = getState().post.list[_idx];
+    const _idx = getState().post.all_post_list.findIndex(
+      (p) => p.id === post_id
+    );
+    console.log(_idx);
+    let _post = getState().post.all_post_list[_idx];
+    console.log(_post);
     let username1 = getState().user.user.username;
     let articleLikeItCount = _post.articleLikeItCount;
     let articleLikeItChecker = _post.articleLikeItChecker;
@@ -115,12 +120,14 @@ export default handleActions(
       }),
     [LIKE_TOGGLE]: (state, action) =>
       produce(state, (draft) => {
-        let idx = draft.list.findIndex((p) => p.id === action.payload.post_id);
+        let idx = draft.all_post_list.findIndex(
+          (p) => p.id === action.payload.post_id
+        );
         console.log(idx);
-        console.log(draft.list);
-        draft.list[idx].articleLikeItChecker =
+        console.log(draft.all_post_list[idx]);
+        draft.all_post_list[idx].articleLikeItChecker =
           action.payload.post.articleLikeItChecker;
-        draft.list[idx].articleLikeItCount =
+        draft.all_post_list[idx].articleLikeItCount =
           action.payload.post.articleLikeItCount;
       }),
     [DELETE_POST]: (state, action) =>
