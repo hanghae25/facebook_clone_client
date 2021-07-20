@@ -6,12 +6,18 @@ import { connectRouter } from 'connected-react-router';
 import Post from './modules/post';
 import Image from './modules/image';
 
+// 리듀서 가져오기
+import User from "./modules/user";
+
+// 브라우저 히스토리
 export const history = createBrowserHistory();
 
+// 가져온 리듀서를 루트
 const rootReducer = combineReducers({
   // user: User,
   post: Post,
   image: Image,
+  user: User,
   router: connectRouter(history),
 });
 
