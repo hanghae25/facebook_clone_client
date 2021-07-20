@@ -1,18 +1,19 @@
-import { createAction, handleActions } from "redux-actions";
-import { produce } from "immer";
-import instance from "../../shared/config";
+import { createAction, handleActions } from 'redux-actions';
+import { produce } from 'immer';
+import instance from '../../shared/config';
 
 // action type
-const SET_MY_POST = "SET_MY_POST";
-const SET_ALL_POST = "SET_ALL_POST";
-const LIKE_TOGGLE = "LIKE_TOGGLE";
-const DELETE_POST = "DELETE_POST";
+const SET_MY_POST = 'SET_MY_POST';
+const SET_ALL_POST = 'SET_ALL_POST';
+const LIKE_TOGGLE = 'LIKE_TOGGLE';
+const DELETE_POST = 'DELETE_POST';
 
 // action creator
 const setMyPost = createAction(SET_MY_POST, (post_list) => ({ post_list }));
 const setAllPost = createAction(SET_ALL_POST, (post_list) => ({ post_list }));
 
-const likeToggle = createAction(LIKE_TOGGLE, (post_id, is_like = null) => ({
+const likeToggle = createAction(LIKE_TOGGLE, (post, post_id) => ({
+  post,
   post_id,
 }));
 const deletePost = createAction(DELETE_POST, (post_id) => ({ post_id }));
@@ -38,7 +39,7 @@ const getMyPostDB = () => {
         dispatch(setMyPost(result.data.content));
       })
       .catch((err) => {
-        console.log("에러: ", err);
+        console.log('에러: ', err);
       });
   };
 };
@@ -52,7 +53,7 @@ const getAllPostDB = () => {
         dispatch(setAllPost(result.data.content));
       })
       .catch((err) => {
-        console.log("에러: ", err);
+        console.log('에러: ', err);
       });
   };
 };
@@ -61,14 +62,18 @@ const deletePostDB = (articleId) => {
   return function (dispatch, getState, { history }) {
     instance.delete(`user/article/${articleId}`).then(() => {
       dispatch(getMyPostDB());
-      console.log("삭제완료");
+      console.log('삭제완료');
     });
   };
 };
 const toggleLikeDB = (post_id) => {
   return function (dispatch, getState) {
-    const _idx = getState().post.list.findIndex((p) => p.id === post_id);
-    let _post = getState().post.list[_idx];
+    const _idx = getState().post.all_post_list.findIndex(
+      (p) => p.id === post_id
+    );
+    console.log(_idx);
+    let _post = getState().post.all_post_list[_idx];
+    console.log(_post);
     let username1 = getState().user.user.username;
     let articleLikeItCount = _post.articleLikeItCount;
     let articleLikeItChecker = _post.articleLikeItChecker;
@@ -101,8 +106,6 @@ const toggleLikeDB = (post_id) => {
   };
 };
 
-
-
 // reducer
 export default handleActions(
   {
@@ -116,12 +119,14 @@ export default handleActions(
       }),
     [LIKE_TOGGLE]: (state, action) =>
       produce(state, (draft) => {
-        let idx = draft.list.findIndex((p) => p.id === action.payload.post_id);
+        let idx = draft.all_post_list.findIndex(
+          (p) => p.id === action.payload.post_id
+        );
         console.log(idx);
-        console.log(draft.list);
-        draft.list[idx].articleLikeItChecker =
+        console.log(draft.all_post_list[idx]);
+        draft.all_post_list[idx].articleLikeItChecker =
           action.payload.post.articleLikeItChecker;
-        draft.list[idx].articleLikeItCount =
+        draft.all_post_list[idx].articleLikeItCount =
           action.payload.post.articleLikeItCount;
       }),
     [DELETE_POST]: (state, action) =>
