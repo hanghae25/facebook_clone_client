@@ -1,22 +1,26 @@
-import { createAction, handleActions } from 'redux-actions';
-import { produce } from 'immer';
-import instance from '../../shared/config';
+import { createAction, handleActions } from "redux-actions";
+import { produce } from "immer";
+import instance from "../../shared/config";
 
 // action type
-const SET_POST = 'SET_POST';
-const LIKE_TOGGLE = 'LIKE_TOGGLE';
-const DELETE_POST = 'DELETE_POST';
+const SET_MY_POST = "SET_MY_POST";
+const SET_ALL_POST = "SET_ALL_POST";
+const LIKE_TOGGLE = "LIKE_TOGGLE";
+const DELETE_POST = "DELETE_POST";
 
 // action creator
-const setPost = createAction(SET_POST, (post_list) => ({ post_list }));
-const likeToggle = createAction(LIKE_TOGGLE, (post, post_id) => ({
-  post,
+const setMyPost = createAction(SET_MY_POST, (post_list) => ({ post_list }));
+const setAllPost = createAction(SET_ALL_POST, (post_list) => ({ post_list }));
+
+const likeToggle = createAction(LIKE_TOGGLE, (post_id, is_like = null) => ({
   post_id,
 }));
 const deletePost = createAction(DELETE_POST, (post_id) => ({ post_id }));
 
 // initialState
 const initialState = {
+  my_post_list: [],
+  all_post_list: [],
   list: [],
   articleLikeItCount: 0,
   articleLikeItChecker: false,
@@ -25,52 +29,42 @@ const initialState = {
 const initialPost = {};
 
 // middleware actions
-const getPostDB = () => {
+const getMyPostDB = () => {
   return function (dispatch, getState, { history }) {
     let username = getState().user.user.username;
-
     instance
-      .get(`/user/all-article/${username}/1/4`)
-      .then((docs) => {
-        console.log(docs);
-        let post_list = [];
-        docs.data.content.forEach((doc) => {
-          // console.log(doc.id, doc);
-          post_list.push(doc);
-        });
-
-        console.log(post_list);
-        dispatch(setPost(post_list));
+      .get(`/user/my-article/${username}/1/20`)
+      .then((result) => {
+        dispatch(setMyPost(result.data.content));
       })
       .catch((err) => {
-        console.log('에러: ', err);
+        console.log("에러: ", err);
       });
   };
 };
 
-const getPostMyDB = () => {
+const getAllPostDB = () => {
   return function (dispatch, getState, { history }) {
     let username = getState().user.user.username;
-
     instance
-      .get(`/user/my-article/${username}/1/3`)
-      .then((docs) => {
-        console.log(docs);
-        let post_list = [];
-        docs.data.content.forEach((doc) => {
-          // console.log(doc.id, doc);
-          post_list.push(doc);
-        });
-
-        console.log(post_list);
-        dispatch(setPost(post_list));
+      .get(`/user/all-article/${username}/1/20`)
+      .then((result) => {
+        dispatch(setAllPost(result.data.content));
       })
       .catch((err) => {
-        console.log('에러: ', err);
+        console.log("에러: ", err);
       });
   };
 };
 
+const deletePostDB = (articleId) => {
+  return function (dispatch, getState, { history }) {
+    instance.delete(`user/article/${articleId}`).then(() => {
+      dispatch(getMyPostDB());
+      console.log("삭제완료");
+    });
+  };
+};
 const toggleLikeDB = (post_id) => {
   return function (dispatch, getState) {
     const _idx = getState().post.list.findIndex((p) => p.id === post_id);
@@ -107,39 +101,18 @@ const toggleLikeDB = (post_id) => {
   };
 };
 
-const deletePostDB = (articleId) => {
-  return function (dispatch, getState, { history }) {
-    // id가 없으면 return!
-    if (!articleId) {
-      window.alert('삭제할 수 없는 게시글이에요!');
-      return;
-    }
 
-    instance.delete(`/user/article/${articleId}`);
-
-    // const postDB = firestore.collection('post');
-
-    // 게시글 id로 선택해서 삭제하기!
-    // postDB
-    //   .doc(id)
-    //   .delete()
-    //   .then((res) => {
-    //     dispatch(deletePost(id));
-    //     history.replace('/');
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
-  };
-};
 
 // reducer
 export default handleActions(
   {
-    [SET_POST]: (state, action) =>
+    [SET_MY_POST]: (state, action) =>
       produce(state, (draft) => {
-        draft.list = action.payload.post_list;
-        console.log(draft.list);
+        draft.my_post_list = action.payload.post_list;
+      }),
+    [SET_ALL_POST]: (state, action) =>
+      produce(state, (draft) => {
+        draft.all_post_list = action.payload.post_list;
       }),
     [LIKE_TOGGLE]: (state, action) =>
       produce(state, (draft) => {
@@ -164,9 +137,9 @@ export default handleActions(
 
 //action creator export
 const actionCreators = {
-  setPost,
-  getPostDB,
-  getPostMyDB,
+  setMyPost,
+  getMyPostDB,
+  getAllPostDB,
   toggleLikeDB,
   deletePostDB,
 };

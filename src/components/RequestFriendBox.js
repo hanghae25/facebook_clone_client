@@ -11,10 +11,15 @@ const RequestFriendBox = () => {
   const requestedFriendList = useSelector(
     (state) => state.friend.requested_friend_list
   );
+
+  console.log("requestedFriendList : ", requestedFriendList);
+
+  const myFriendList = useSelector((state) => state.friend.my_friend_list);
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(friendAction.requestedFriendListDB());
+    dispatch(friendAction.getMyFriendListDB());
   }, []);
 
   const acceptFriend = (friendName) => {
@@ -31,10 +36,10 @@ const RequestFriendBox = () => {
         <RequestFriendNum> {requestedFriendList.length}개</RequestFriendNum>
       </h3>
 
-      {requestedFriendList.map(({ username }) => {
+      {requestedFriendList.map(({ username, picture }) => {
         return (
           <RequestFriendWapper>
-            <RequestFriendImg></RequestFriendImg>
+            <RequestFriendImg picture={picture}></RequestFriendImg>
             <RequestContentBox>
               <RequestContentName>
                 {username.replace(/[0-9]/g, "")}
@@ -47,6 +52,20 @@ const RequestFriendBox = () => {
                   삭제
                 </RequestBtnDelete>
               </RequestContentBtnBox>
+            </RequestContentBox>
+          </RequestFriendWapper>
+        );
+      })}
+      <h3>
+        내 친구 목록
+        <RequestFriendNum> {myFriendList.length}명</RequestFriendNum>
+      </h3>
+      {myFriendList.map(({ username, picture }) => {
+        return (
+          <RequestFriendWapper>
+            <RequestFriendImg picture={picture}></RequestFriendImg>
+            <RequestContentBox>
+              <RequestContentName>{username}</RequestContentName>
             </RequestContentBox>
           </RequestFriendWapper>
         );
@@ -70,7 +89,10 @@ const RequestFriendWapper = styled.div`
 `;
 
 const RequestFriendImg = styled.div`
-  background: url("https://mblogthumb-phinf.pstatic.net/20140606_111/sjinwon2_1402052862659ofnU1_PNG/130917_224626.png?type=w2")
+  background: url(${(props) =>
+      props.picture !== ""
+        ? props.picture
+        : "https://mblogthumb-phinf.pstatic.net/20140606_111/sjinwon2_1402052862659ofnU1_PNG/130917_224626.png?type=w2"})
     no-repeat center;
   background-size: 100% 100%;
   -webkit-background-size: 100% 100%;
