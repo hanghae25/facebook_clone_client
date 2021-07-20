@@ -17,7 +17,6 @@ const Detail = () => {
   React.useEffect(() => {
     dispatch(postActioncs.getMyPostDB());
   }, []);
-
   return (
     <React.Fragment>
       <GridBox>
