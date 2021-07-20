@@ -10,7 +10,9 @@ const ProfileBox = () => {
         <ProfileImg></ProfileImg>
       </ProfileImgBox>
       <ProfileRightBox>
-        <ProfileRightText>{user.username}</ProfileRightText>
+        <ProfileRightText>
+          {user.username.replace(/[0-9]/g, "")}
+        </ProfileRightText>
       </ProfileRightBox>
     </ProfileBoxContainer>
   );

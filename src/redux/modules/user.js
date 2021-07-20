@@ -35,11 +35,14 @@ const loginAPI = (emailAddress, password) => {
         const accessToken = result.data; // API 요청하는 콜마다 해더에 accessTocken 담아 보내도록 설정
         instance.defaults.headers.common["Authorization"] = `${accessToken}`;
         setCookie("token", accessToken, 1, "/");
+
+        var decoded = jwt_decode(accessToken);
         dispatch(
           logIn({
-            username: "uaername",
+            username: decoded.sub,
           })
         );
+
         history.push("/");
       })
       .catch((error) => {
@@ -56,7 +59,7 @@ const logOutAPI = () => {
     instance.defaults.headers.common["Authorization"] = null;
     delete instance.defaults.headers.common["Authorization"];
     dispatch(logOut());
-    history.replace("/");
+    history.replace("/login");
   };
 };
 
