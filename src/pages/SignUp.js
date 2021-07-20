@@ -110,7 +110,6 @@ const SignUp= (props) => {
         );
     };
 
-
 const Header = styled.div`
     width: 100%;
     height: 45px;

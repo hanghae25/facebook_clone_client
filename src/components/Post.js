@@ -1,161 +1,146 @@
-import React from "react";
-import { Grid, Image, Text, Button } from "../elements";
-import { HeartButton } from "./index";
+import React from 'react';
+import styled from 'styled-components';
+import { useDispatch } from 'react-redux';
 
-import { history } from "../redux/configureStore";
+import HeartButton from './HeartButton';
 
-import { useDispatch } from "react-redux";
-import { actionCreators as postActions } from "../redux/modules/post";
+// import Carousel from 'react-gallery-carousel';
+// import 'react-gallery-carousel/dist/index.css';
 
-// 게시글 1개 뷰를 담당합니다.
-// layout_type에 따라 각각 타입에 맞는 레이아웃을 그려줄거예요.
-// layout_type : a, b, c
-//  - a : 텍스트가 위, 이미지가 아래인 레이아웃
-//  - b : 텍스트가 좌측, 이미지가 우측인 레이아웃
-//  - c : 텍스트가 우측, 이미지가 좌측인 레이아웃
-// image_url : 이미지 주소
-// like_cnt : 좋아요 갯수
-// insert_dt : 작성일시
-// user_info: 유저 정보 (딕셔너리 / user_name, user_id, user_profile를 가지고 있어요.)
-// is_me : 지금 로그인한 사용자가 작성자인지 아닌 지 판단해요.
-// id : 게시글 id
-// contents : 게시글 내용
-const Post = React.memo((props) => {
+const Post = (props) => {
   const dispatch = useDispatch();
+
+  // console.log(props.picture.split(','));
+
+  // const pictures = () => {
+  //   const images = props.picture.split(',').map((img) => ({
+  //     src: img,
+  //   }));
+  //   console.log(images);
+  //   return <Carousel images={images} style={{ height: 500, width: 800 }} />;
+  // };
 
   return (
     <React.Fragment>
-      <Grid>
-        <Grid is_flex padding="16px">
-          <Grid is_flex width="auto">
-            <Image shape="circle" src={props.src} />
-            <Text bold>{props.user_info.user_name}</Text>
-          </Grid>
-          <Grid is_flex width="auto">
-            <Text>{props.insert_dt}</Text>
-            {props.is_me && (
-              <React.Fragment>
-                <Button
-                  width="auto"
-                  margin="4px"
-                  padding="4px"
-                  _onClick={(e) => {
-                    //  이벤트 캡쳐링과 버블링을 막아요!
-                    // 이벤트 캡쳐링, 버블링이 뭔지 검색해보기! :)
-                    e.preventDefault();
-                    e.stopPropagation();
-                    history.push(`/write/${props.id}`);
-                  }}
-                >
-                  수정
-                </Button>
-                <Button
-                  width="auto"
-                  margin="4px"
-                  padding="4px"
-                  _onClick={(e) => {
-                    //  이벤트 캡쳐링과 버블링을 막아요!
-                    // 이벤트 캡쳐링, 버블링이 뭔지 검색해보기! :)
-                    e.preventDefault();
-                    e.stopPropagation();
-
-                    // 게시글 삭제하기
-                    // 여기에서는 window.confirm 등을 사용해서 진짜 지우냐고 한 번 더 물어봐주면 정말 좋겠죠!
-                    dispatch(postActions.deletePostFB(props.id));
-                  }}
-                >
-                  삭제
-                </Button>
-              </React.Fragment>
-            )}
-          </Grid>
-        </Grid>
-
-        {/* layout type이 a일 때 */}
-        {props.layout_type === "a" && (
-          <React.Fragment>
-            <Grid padding="16px">
-              <Text>{props.contents}</Text>
-            </Grid>
-            <Grid>
-              <Image shape="rectangle" src={props.image_url} />
-            </Grid>
-          </React.Fragment>
-        )}
-
-        {/* layout type이 b일 때 */}
-        {props.layout_type === "b" && (
-          <React.Fragment>
-            <Grid is_flex>
-              <Grid width="50%" padding="16px">
-                <Text>{props.contents}</Text>
-              </Grid>
-              <Image shape="rectangle" src={props.image_url} />
-            </Grid>
-          </React.Fragment>
-        )}
-
-        {/* layout type이 c일 때 */}
-        {props.layout_type === "c" && (
-          <React.Fragment>
-            <Grid is_flex>
-              <Image shape="rectangle" src={props.image_url} />
-              <Grid width="50%" padding="16px">
-                <Text>{props.contents}</Text>
-              </Grid>
-            </Grid>
-          </React.Fragment>
-        )}
-              <React.Fragment>
-        <Grid>
-          <Grid is_flex padding="16px">
-            <Grid is_flex width="auto">
-              <Image shape="circle" src={props.src} />
-              <Text bold>{props.user_info.user_name}</Text>
-            </Grid>
-            <Grid is_flex width="auto">
-              {props.is_me && (<Button width="auto" padding="4px" margin="4px" _onClick={() => {history.push(`/write/${props.id}`)}}>수정</Button>)}
-              <Text>{props.insert_dt}</Text>
-            </Grid>
-          </Grid>
-          <Grid padding="16px">
-            <Text>{props.contents}</Text>
-          </Grid>
-          <Grid>
-            <Image shape="rectangle" src={props.image_url} />
-          </Grid>
-          <Grid padding="16px">
-            <Text margin="0px" bold>댓글 {props.comment_cnt}개</Text>
-          </Grid>
-        </Grid>
-      </React.Fragment>
-
-        <Grid is_flex padding="16px">
-          <Text margin="0px" bold>
-            좋아요 {props.like_cnt}개
-          </Text>
-
-          {/* 좋아요 버튼은 위치만 잡아줄게요! */}
-          <HeartButton></HeartButton>
-        </Grid>
-      </Grid>
+      <GridBox bg="#FFFFFF" padding="16px" margin="8px 0px">
+        <GridBox is_flex flexstart>
+          <ImageCircle
+            img="https://scontent-gmp1-1.xx.fbcdn.net/v/t1.30497-1/143086968_2856368904622192_1959732218791162458_n.png?_nc_cat=1&ccb=1-3&_nc_sid=dbb9e7&efg=eyJpIjoiYiJ9&_nc_ohc=r2DZdUdfmL8AX8zjovP&_nc_ht=scontent-gmp1-1.xx&oh=7c280ce678e39af2493fef764f492917&oe=60F7C4F8"
+            size="36"
+          ></ImageCircle>
+          <Span bold margin="0px 0px 0px 10px">
+            {props.username}
+          </Span>
+        </GridBox>
+      </GridBox>
+      <GridBox margin="8px 0px" bg="#FFFFFF">
+        <Span size="20px">{props.content}</Span>
+        <ImageRec img={props.picture.split(',')[0]}></ImageRec>
+      </GridBox>
+      <GridBox bg="#FFFFFF" padding="16px" margin="8px 0px">
+        <GridBox is_flex spacebetween>
+          <Span size="12px" color="#65676B">
+            좋아요 {props.articleLikeItCount}개
+          </Span>
+          <Span size="12px" color="#65676B">
+            댓글 {props.commentCount}개
+          </Span>
+        </GridBox>
+        <GreyLine></GreyLine>
+        <GridBox is_flex spacebetween>
+          <GridBox is_flex flexstart>
+            <HeartButton
+              // _onClick={(e) => {
+              //   e.preventDefault();
+              //   e.stopPropagation();
+              //   dispatch(postActions.toggleLikeDB(props.id));
+              // }}
+              is_like={props.is_like}
+            ></HeartButton>
+            <Span size="12px" color="#151515" margin="0px 0px 0px 4px">
+              좋아요
+            </Span>
+          </GridBox>
+          <GridBox is_flex flexstart>
+            <CommentImg></CommentImg>
+            <Span size="12px" color="#151515" margin="0px 0px 0px 4px">
+              댓글
+            </Span>
+          </GridBox>
+        </GridBox>
+      </GridBox>
     </React.Fragment>
   );
-});
+};
 
 Post.defaultProps = {
-  id: null,
-  user_info: {
-    user_id: "",
-    user_name: "",
-    user_profile: "https://scontent-gmp1-1.xx.fbcdn.net/v/t1.30497-1/p160x160/143086968_2856368904622192_1959732218791162458_n.png?_nc_cat=1&ccb=1-3&_nc_sid=7206a8&_nc_ohc=r2DZdUdfmL8AX9UnLJE&tn=tQAeeEesgp3mQZ73&_nc_ht=scontent-gmp1-1.xx&oh=a57372edf02002d81ec77f6b09103dbd&oe=60F79ED8",
-  },
-  image_url: "",
-  contents: "",
-  like_cnt: 10,
-  layout_type: "a",
-  insert_dt: "2021-02-27 10:00:00",
-  is_me: false,
+  createdAt: '2021-07-11 20:49:00',
+  modifiedAt: '2021-07-11 20:49:00',
+  id: 99,
+  username: '디폴드',
+  content: '게시물 작성',
+  picture:
+    'https://scontent-gmp1-1.xx.fbcdn.net/v/t1.30497-1/143086968_2856368904622192_1959732218791162458_n.png?_nc_cat=1&ccb=1-3&_nc_sid=dbb9e7&efg=eyJpIjoiYiJ9&_nc_ohc=r2DZdUdfmL8AX8zjovP&_nc_ht=scontent-gmp1-1.xx&oh=7c280ce678e39af2493fef764f492917&oe=60F7C4F8',
+  video: '',
+  commentCount: 25,
+  articleLikeItCount: 25,
+  articleLikeItChecker: false,
+  articleLikeItUserList: [],
 };
+
+const GridBox = styled.div`
+  width: ${(props) => props.width};
+  height: 100%;
+  box-sizing: border-box;
+  ${(props) => (props.padding ? `padding: ${props.padding}` : '')};
+  ${(props) => (props.margin ? `margin: ${props.margin}` : '')};
+  ${(props) => (props.bg ? `background-color: ${props.bg}` : '')};
+  ${(props) => (props.is_flex ? `display: flex; align-items: center;` : '')}
+  ${(props) => (props.center ? `text-align: center;` : '')}
+  ${(props) => (props.flexstart ? `justify-content: flex-start;` : '')}
+  ${(props) => (props.spacebetween ? `justify-content: space-between;` : '')}
+`;
+
+const ImageCircle = styled.div`
+  --size: ${(props) => props.size}px;
+  width: var(--size);
+  height: var(--size);
+  background-image: url(${(props) => props.img});
+  background-size: cover;
+  border-radius: 50%;
+`;
+
+const ImageRec = styled.div`
+  width: 100%;
+  height: 327px;
+  background-image: url(${(props) => props.img});
+  background-size: cover;
+`;
+
+const CommentImg = styled.div`
+  background-image: url(https://static.xx.fbcdn.net/rsrc.php/v3/y6/r/ygqyYKTnj3x.png);
+  background-position: 0px -174px;
+  background-size: auto;
+  width: 18px;
+  height: 18px;
+  background-repeat: no-repeat;
+  display: inline-block;
+`;
+
+const GreyLine = styled.div`
+  box-sizing: border-box;
+  width: 100%;
+  height: 1px;
+  margin: 8px 0px;
+  background-color: #ced0d4;
+`;
+
+const Span = styled.span`
+  margin: ${(props) => props.margin};
+  color: ${(props) => props.color};
+  font-size: ${(props) => props.size};
+  font-weight: ${(props) => (props.bold ? '600' : '400')};
+  ${(props) => (props.margin ? `margin: ${props.margin}` : '')}
+`;
 
 export default Post;

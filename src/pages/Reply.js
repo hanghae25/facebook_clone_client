@@ -8,11 +8,9 @@ import text_ballloon from "../shared/text_ballloon.png";
 // import Post from "../components/Post";
 
 
-
-
-
 import styled from "styled-components"
-
+import CommentWrite from "../components/CommmentWrite";
+import CommentList from "../components/CommentList";
 const Reply=(props)=> {
 
     return(
@@ -46,24 +44,20 @@ const Reply=(props)=> {
 
             <Line/>
 
-            <Grid flex>  
-                <Image shape="circle" src={props.src} />
-                <ReplyView/> 
-            </Grid>
-            <p style={{fontSize:"12px", margin: "auto 50px"}}> 좋아요       답글 달기      더 보기</p>
-            <Grid flex>  
-                <Image shape="circle" src={props.src} />
-                <ReplyView/> 
-            </Grid>
-            <p style={{fontSize:"12px", margin: "auto 50px"}}> 좋아요       답글 달기      더 보기</p>
 
+            {/* <Grid flex>  
+                <Image shape="circle" src={props.src} />
+                <ReplyView/> 
+            </Grid> */}
+            <p style={{fontSize:"12px", margin: "auto 50px"}}> 좋아요       답글 달기      더 보기</p>
+            {/* <Grid flex>  
+                <Image shape="circle" src={props.src} />
+                <ReplyView/> 
+            </Grid> */}
+
+            <CommentList/>
             <Line/>
-
-            <Grid flex>  
-                <Image shape="circle" src={props.src} />
-                <ReplyInput placeholder= "  댓글을 입력하세요." ></ReplyInput>
-                <PlusReplyButton>게시</PlusReplyButton>  
-            </Grid>   
+            <CommentWrite/>
 
         </React.Fragment>
     );
@@ -95,32 +89,6 @@ const Line = styled.hr`
     boder: 1px solid #d2d2d2;
 `;
 
-const ReplyInput = styled.input`
-    width: 69%;
-    height: 40px;
-    border-radius: 30px;
-    border: 1px solid grey;
-    margin-left: 10px;
-`;
-
-const PlusReplyButton = styled.button`
-    margin: auto 10px auto 10px;
-    width: 45px;
-    height: 38px;
-    background-color: white;
-    border: 1px solid grey;
-    border-radius: 3px;
-    color: grey;
-`;
-
-const ReplyView = styled.div`
-    width: 50%;
-    height: 50px;
-    background-color: #dcdcdc;
-    border: none;
-    border-radius: 15px;
-    margin-left: 10px;
-`;
 
 const LikePoint = styled.div`
     width: 18px;

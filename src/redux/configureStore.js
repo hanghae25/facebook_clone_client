@@ -5,6 +5,7 @@ import { connectRouter } from "connected-react-router";
 
 // 리듀서 가져오기
 import User from "./modules/user";
+import Comment from "./modules/comment";
 
 // 브라우저 히스토리
 export const history = createBrowserHistory();
@@ -12,6 +13,7 @@ export const history = createBrowserHistory();
 // 가져온 리듀서를 루트
 const rootReducer = combineReducers({
   user: User,
+  comment: Comment, 
   router: connectRouter(history),
 });
 
@@ -20,7 +22,7 @@ const middlewares = [thunk.withExtraArgument({ history: history })];
 // 지금이 어느 환경인 지 알려줘요. (개발환경, 프로덕션(배포)환경 ...)
 const env = process.env.NODE_ENV;
 
-// 개발환경에서는 로거라는 걸 하나만 더 써볼게요.
+// 로거
 if (env === "development") {
   const { logger } = require("redux-logger");
   middlewares.push(logger);

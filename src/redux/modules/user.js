@@ -1,17 +1,16 @@
 import { createAction, handleActions } from "redux-actions";
 import { produce } from "immer";
-import axios from 'axios';
 
 import instance from "../../shared/config";
 import { setCookie, deleteCookie } from "../../shared/Cookie";
 //actions
-const LOG_IN = "LOG_IN";  // 로그인
 const LOG_OUT = "LOG_OUT"; // 로그아웃
 const LOGIN_CHECK = "LOGIN_CHECK"
 const GET_USER = "GET_USER"; // 유저정보 가져오기
+const SET_USER = "SET_USER";
 
 //actionCreators
-const logIn = createAction(LOG_IN, (user) => ({user}));
+const setUser = createAction(SET_USER, (user) =>({user}));
 const logOut = createAction(LOG_OUT, (user) => ({user}));
 const loginCheck = createAction(LOGIN_CHECK, (session) => ({session}));
 const getUser = createAction(GET_USER, (user) => ({user}));
@@ -37,8 +36,8 @@ const loginAPI = (emailAddress, password) => {
                     const accessToken = result.data; // API 요청하는 콜마다 해더에 accessTocken 담아 보내도록 설정 
                     instance.defaults.headers.common["Authorization"] = `${accessToken}`;
                     setCookie("token", accessToken, 1, "/");
-                    dispatch(({
-                        username: "uaername"
+                    dispatch(setUser({
+                        username: "username"
                     }));
                         history.push("/");
                 })
@@ -47,6 +46,7 @@ const loginAPI = (emailAddress, password) => {
                     window.alert("로그인 실패");
                     }
                 );
+
     };
 };
 
@@ -116,7 +116,7 @@ export default handleActions({
     [LOGIN_CHECK]: (state,action) => produce(state,(draft) => {
         draft.is_login = action.payload.session;
     }),
-    [LOG_IN]: (state,action) => produce(state,(draft) => {
+    [SET_USER]: (state,action) => produce(state,(draft) => {
         draft.user = action.payload.user;
         draft.is_login = true;
     }),
@@ -134,9 +134,9 @@ export default handleActions({
 //action creator export
 const actionCreators = {
     loginCheck,
-    logIn,
     logOut,
     getUser,
+    setUser,
     loginAPI,
     logOutAPI,
     signupAPI,
