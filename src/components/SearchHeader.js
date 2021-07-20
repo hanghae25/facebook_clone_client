@@ -1,11 +1,12 @@
 import React from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 const SearchHeader = () => {
+  const history = useHistory();
   return (
     <SearchHeaderBox>
-      <BackBtn></BackBtn>
+      <BackBtn onClick={() => history.goBack()}></BackBtn>
       <Link to="/">
         <GoHome>Facebook</GoHome>
       </Link>

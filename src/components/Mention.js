@@ -4,11 +4,11 @@ import { useSelector, useDispatch } from "react-redux";
 import { actionCreators as articleAction } from "../redux/module/article";
 const Mention = () => {
   const dispatch = useDispatch();
+  const username = useSelector((state) => state.user.user.username);
 
   const handleActicleData = (e) => {
     const article = {
-      //나중에 usename 에 로그인한 유저 상태값 받아서 그 유저네임 넣어야함. 지금은 로그인 구현안되어있으니 임시방편으로 아무거나
-      username: "아무개",
+      username: username,
       content: e.target.value,
     };
 

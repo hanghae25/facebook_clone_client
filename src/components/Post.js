@@ -1,161 +1,239 @@
 import React from "react";
-import { Grid, Image, Text, Button } from "../elements";
-import { HeartButton } from "./index";
-
-import { history } from "../redux/configureStore";
-
+import styled from "styled-components";
 import { useDispatch } from "react-redux";
-import { actionCreators as postActions } from "../redux/modules/post";
 
-// 게시글 1개 뷰를 담당합니다.
-// layout_type에 따라 각각 타입에 맞는 레이아웃을 그려줄거예요.
-// layout_type : a, b, c
-//  - a : 텍스트가 위, 이미지가 아래인 레이아웃
-//  - b : 텍스트가 좌측, 이미지가 우측인 레이아웃
-//  - c : 텍스트가 우측, 이미지가 좌측인 레이아웃
-// image_url : 이미지 주소
-// like_cnt : 좋아요 갯수
-// insert_dt : 작성일시
-// user_info: 유저 정보 (딕셔너리 / user_name, user_id, user_profile를 가지고 있어요.)
-// is_me : 지금 로그인한 사용자가 작성자인지 아닌 지 판단해요.
-// id : 게시글 id
-// contents : 게시글 내용
-const Post = React.memo((props) => {
+import HeartButton from "./HeartButton";
+import { actionCreators as postAction } from "../redux/modules/post";
+
+import { Swiper, SwiperSlide } from "swiper/react";
+
+// Import Swiper styles
+const Post = (props) => {
   const dispatch = useDispatch();
+  const {
+    id,
+    content,
+    modifiedAt,
+    username,
+    picture,
+    commentCount,
+    articleLikeItCount,
+    usernamePicture,
+  } = props;
+  const pictureList = picture.split(",");
+
+  const handleDeletePost = (id) => {
+    dispatch(postAction.deletePostDB(id));
+  };
 
   return (
-    <React.Fragment>
-      <Grid>
-        <Grid is_flex padding="16px">
-          <Grid is_flex width="auto">
-            <Image shape="circle" src={props.src} />
-            <Text bold>{props.user_info.user_name}</Text>
-          </Grid>
-          <Grid is_flex width="auto">
-            <Text>{props.insert_dt}</Text>
-            {props.is_me && (
-              <React.Fragment>
-                <Button
-                  width="auto"
-                  margin="4px"
-                  padding="4px"
-                  _onClick={(e) => {
-                    //  이벤트 캡쳐링과 버블링을 막아요!
-                    // 이벤트 캡쳐링, 버블링이 뭔지 검색해보기! :)
-                    e.preventDefault();
-                    e.stopPropagation();
-                    history.push(`/write/${props.id}`);
-                  }}
-                >
-                  수정
-                </Button>
-                <Button
-                  width="auto"
-                  margin="4px"
-                  padding="4px"
-                  _onClick={(e) => {
-                    //  이벤트 캡쳐링과 버블링을 막아요!
-                    // 이벤트 캡쳐링, 버블링이 뭔지 검색해보기! :)
-                    e.preventDefault();
-                    e.stopPropagation();
+    <PostContainer>
+      <PostHeader>
+        <PostHeaderImage
+          src={
+            usernamePicture
+              ? usernamePicture
+              : "https://scontent-gmp1-1.xx.fbcdn.net/v/t1.30497-1/143086968_2856368904622192_1959732218791162458_n.png?_nc_cat=1&ccb=1-3&_nc_sid=dbb9e7&efg=eyJpIjoiYiJ9&_nc_ohc=r2DZdUdfmL8AX8zjovP&_nc_ht=scontent-gmp1-1.xx&oh=7c280ce678e39af2493fef764f492917&oe=60F7C4F8"
+          }
+        ></PostHeaderImage>
+        <PostHeaderInfo>
+          <PostUserName>{username.replace(/[0-9]/g, "")}</PostUserName>
+          <PostDate>{modifiedAt}</PostDate>
+        </PostHeaderInfo>
+        <PostControll>
+          <PostUpdate>수정</PostUpdate> /{" "}
+          <PostDelete onClick={() => handleDeletePost(id)}>삭제</PostDelete>
+        </PostControll>
+      </PostHeader>
+      <PostContent>{content}</PostContent>
+      <PostImage src={pictureList[0]}></PostImage>
+      {/* {pictureList.map((src) => {
+        return <PostImage src={src}></PostImage>;
+      })} */}
 
-                    // 게시글 삭제하기
-                    // 여기에서는 window.confirm 등을 사용해서 진짜 지우냐고 한 번 더 물어봐주면 정말 좋겠죠!
-                    dispatch(postActions.deletePostFB(props.id));
-                  }}
-                >
-                  삭제
-                </Button>
-              </React.Fragment>
-            )}
-          </Grid>
-        </Grid>
-
-        {/* layout type이 a일 때 */}
-        {props.layout_type === "a" && (
-          <React.Fragment>
-            <Grid padding="16px">
-              <Text>{props.contents}</Text>
-            </Grid>
-            <Grid>
-              <Image shape="rectangle" src={props.image_url} />
-            </Grid>
-          </React.Fragment>
-        )}
-
-        {/* layout type이 b일 때 */}
-        {props.layout_type === "b" && (
-          <React.Fragment>
-            <Grid is_flex>
-              <Grid width="50%" padding="16px">
-                <Text>{props.contents}</Text>
-              </Grid>
-              <Image shape="rectangle" src={props.image_url} />
-            </Grid>
-          </React.Fragment>
-        )}
-
-        {/* layout type이 c일 때 */}
-        {props.layout_type === "c" && (
-          <React.Fragment>
-            <Grid is_flex>
-              <Image shape="rectangle" src={props.image_url} />
-              <Grid width="50%" padding="16px">
-                <Text>{props.contents}</Text>
-              </Grid>
-            </Grid>
-          </React.Fragment>
-        )}
-              <React.Fragment>
-        <Grid>
-          <Grid is_flex padding="16px">
-            <Grid is_flex width="auto">
-              <Image shape="circle" src={props.src} />
-              <Text bold>{props.user_info.user_name}</Text>
-            </Grid>
-            <Grid is_flex width="auto">
-              {props.is_me && (<Button width="auto" padding="4px" margin="4px" _onClick={() => {history.push(`/write/${props.id}`)}}>수정</Button>)}
-              <Text>{props.insert_dt}</Text>
-            </Grid>
-          </Grid>
-          <Grid padding="16px">
-            <Text>{props.contents}</Text>
-          </Grid>
-          <Grid>
-            <Image shape="rectangle" src={props.image_url} />
-          </Grid>
-          <Grid padding="16px">
-            <Text margin="0px" bold>댓글 {props.comment_cnt}개</Text>
-          </Grid>
-        </Grid>
-      </React.Fragment>
-
-        <Grid is_flex padding="16px">
-          <Text margin="0px" bold>
-            좋아요 {props.like_cnt}개
-          </Text>
-
-          {/* 좋아요 버튼은 위치만 잡아줄게요! */}
-          <HeartButton></HeartButton>
-        </Grid>
-      </Grid>
-    </React.Fragment>
+      <FeedbackBox>
+        <FeedbackBoxTop>
+          <FeedbackLikeIconBox>
+            <FeedbackLikeIcon></FeedbackLikeIcon>
+            <FeedbackLikeIcon2></FeedbackLikeIcon2>
+            <FeedbackCount>{articleLikeItCount}명</FeedbackCount>
+          </FeedbackLikeIconBox>
+          <CommentCount>댓글 {commentCount}개</CommentCount>
+        </FeedbackBoxTop>
+        <FeedbackBoxBottom>
+          <LikeBtnBox>
+            <LikeIcon></LikeIcon>
+            <BottomBoxTxt>좋아요</BottomBoxTxt>
+          </LikeBtnBox>
+          <CommentBtnBox>
+            <CommentIcon></CommentIcon>
+            <BottomBoxTxt>댓글 달기</BottomBoxTxt>
+          </CommentBtnBox>
+        </FeedbackBoxBottom>
+      </FeedbackBox>
+    </PostContainer>
   );
-});
-
-Post.defaultProps = {
-  id: null,
-  user_info: {
-    user_id: "",
-    user_name: "",
-    user_profile: "https://scontent-gmp1-1.xx.fbcdn.net/v/t1.30497-1/p160x160/143086968_2856368904622192_1959732218791162458_n.png?_nc_cat=1&ccb=1-3&_nc_sid=7206a8&_nc_ohc=r2DZdUdfmL8AX9UnLJE&tn=tQAeeEesgp3mQZ73&_nc_ht=scontent-gmp1-1.xx&oh=a57372edf02002d81ec77f6b09103dbd&oe=60F79ED8",
-  },
-  image_url: "",
-  contents: "",
-  like_cnt: 10,
-  layout_type: "a",
-  insert_dt: "2021-02-27 10:00:00",
-  is_me: false,
 };
 
+const PostContainer = styled.div`
+  background-color: #fff;
+  width: 100%;
+  margin: 8px 0;
+  box-sizing: border-box;
+`;
+
+const PostHeader = styled.div`
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding: 10px;
+`;
+
+const PostHeaderImage = styled.img`
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+`;
+
+const PostHeaderInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  margin-left: 10px;
+`;
+
+const PostUserName = styled.div`
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 17px;
+`;
+
+const PostDate = styled.div`
+  font-size: 12px;
+  line-height: 16px;
+  color: grey;
+`;
+
+const PostControll = styled.div`
+  font-size: 14px;
+  position: absolute;
+  right: 10px;
+`;
+const PostUpdate = styled.span``;
+const PostDelete = styled.span``;
+
+const PostContent = styled.div`
+  padding: 10px;
+  margin: 10px 0;
+`;
+
+const PostImage = styled.img`
+  display: block;
+  width: 100%;
+  height: 414px;
+`;
+
+const FeedbackBox = styled.div`
+  position: relative;
+  padding: 10px;
+  box-sizing: border-box;
+`;
+
+const FeedbackBoxTop = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid lightgrey;
+  padding-bottom: 8px;
+  box-sizing: border-box;
+`;
+
+const FeedbackBoxBottom = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: border-box;
+  padding-top: 8px;
+`;
+
+const FeedbackLikeIconBox = styled.div`
+  display: flex;
+`;
+
+const FeedbackLikeIcon = styled.div`
+  background-image: url("https://static.xx.fbcdn.net/rsrc.php/v3/yp/r/LMx56u68mFY.png");
+  background-size: 104px 315px;
+  background-repeat: no-repeat;
+  background-position: -68px -243px;
+  display: inline-block;
+  height: 16px;
+  width: 16px;
+`;
+
+const FeedbackLikeIcon2 = styled.div`
+  background-image: url("https://static.xx.fbcdn.net/rsrc.php/v3/yp/r/LMx56u68mFY.png");
+  background-size: 104px 315px;
+  background-repeat: no-repeat;
+  background-position: -51px -243px;
+  display: inline-block;
+  height: 16px;
+  width: 16px;
+`;
+
+const FeedbackCount = styled.span`
+  display: inline;
+  margin-left: 4px;
+  vertical-align: middle;
+  color: #616770;
+  font-size: 14px;
+`;
+
+const CommentCount = styled.span`
+  vertical-align: middle;
+  color: #616770;
+  font-size: 14px;
+`;
+
+const LikeBtnBox = styled.div`
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const LikeIcon = styled.div`
+  background-image: url("https://static.xx.fbcdn.net/rsrc.php/v3/yp/r/LMx56u68mFY.png");
+  background-repeat: no-repeat;
+  background-size: 104px 315px;
+  background-position: 0 -205px;
+  height: 20px;
+  width: 20px;
+  display: inline-block;
+`;
+
+const CommentIcon = styled.div`
+  background-image: url("https://static.xx.fbcdn.net/rsrc.php/v3/yp/r/LMx56u68mFY.png");
+  background-repeat: no-repeat;
+  background-size: 104px 315px;
+  background-position: -63px -184px;
+  height: 20px;
+  width: 20px;
+  display: inline-block;
+`;
+
+const BottomBoxTxt = styled.span`
+  margin-left: 5px;
+  font-size: 14px;
+  color: #616770;
+  font-weight: bold;
+`;
+
+const CommentBtnBox = styled.div`
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 export default Post;
