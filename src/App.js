@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import { Route } from "react-router-dom";
 import PostWrite from "./pages/PostWrite";
 import Search from "./pages/Search";
@@ -7,8 +7,8 @@ import LoadingSpinner from "../src/components/LoadingSpinner";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import Reply from "./pages/Reply";
-import MainPage from './pages/MainPage';
-import Detail from './pages/Detail';
+import MainPage from "./pages/MainPage";
+import Detail from "./pages/Detail";
 
 import { actionCreators as userAction } from "./redux/modules/user";
 import { useSelector, useDispatch } from "react-redux";
@@ -21,7 +21,7 @@ function App() {
   return (
     <div className="App">
       <Route path="/" exact component={MainPage} />
-        <Route path="/detail" exact component={Detail} />
+      <Route path="/detail" exact component={Detail} />
       <Route path="/post_write" component={PostWrite}></Route>
       <Route path="/search" component={Search}></Route>
       <Route path="/request_friend" component={RequestFriend}></Route>
