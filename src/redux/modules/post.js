@@ -14,14 +14,16 @@ const setAllPost = createAction(SET_ALL_POST, (post_list) => ({ post_list }));
 
 const likeToggle = createAction(LIKE_TOGGLE, (post_id, is_like = null) => ({
   post_id,
-  is_like,
 }));
+const deletePost = createAction(DELETE_POST, (post_id) => ({ post_id }));
 
 // initialState
 const initialState = {
   my_post_list: [],
   all_post_list: [],
   list: [],
+  articleLikeItCount: 0,
+  articleLikeItChecker: false,
 };
 
 const initialPost = {};
@@ -63,38 +65,43 @@ const deletePostDB = (articleId) => {
     });
   };
 };
-const toggleLikeDB = (post_id, username) => {
+const toggleLikeDB = (post_id) => {
   return function (dispatch, getState) {
     const _idx = getState().post.list.findIndex((p) => p.id === post_id);
     let _post = getState().post.list[_idx];
-    let like_cnt = _post.like_cnt;
-    let is_like = _post.is_like;
-
+    let username1 = getState().user.user.username;
+    let articleLikeItCount = _post.articleLikeItCount;
+    let articleLikeItChecker = _post.articleLikeItChecker;
+    console.log(_idx, _post, articleLikeItCount, articleLikeItChecker);
     instance
-      .post(
-        "/user/article/likeIt",
-        {
-          articleId: post_id,
-          username: "lee",
-        }
-        // { withCredentials: true }
-      )
+      .post('/user/article/likeIt', {
+        articleId: post_id,
+        username: username1,
+      })
       .then((response) => {
-        if (!response.data.res) {
-          window.alert(response.data.msg);
-          return;
-        }
-        is_like = is_like === false ? true : false;
-        like_cnt = is_like === true ? like_cnt + 1 : like_cnt - 1;
-
+        console.log(response);
+        // if (!response.data.articleLikeIt) {
+        //   window.alert(response.data.msg);
+        //   return;
+        // }
+        console.log(_idx, _post, articleLikeItCount, articleLikeItChecker);
+        articleLikeItChecker = articleLikeItChecker === false ? true : false;
+        articleLikeItCount =
+          articleLikeItChecker === true
+            ? articleLikeItCount + 1
+            : articleLikeItCount - 1;
+        console.log(_idx, _post, articleLikeItCount, articleLikeItChecker);
         const like_post = {
-          like_cnt: like_cnt,
-          is_like: is_like,
+          articleLikeItCount: articleLikeItCount,
+          articleLikeItChecker: articleLikeItChecker,
         };
+        console.log(like_post, post_id);
         dispatch(likeToggle(like_post, post_id));
       });
   };
 };
+
+
 
 // reducer
 export default handleActions(
@@ -110,8 +117,19 @@ export default handleActions(
     [LIKE_TOGGLE]: (state, action) =>
       produce(state, (draft) => {
         let idx = draft.list.findIndex((p) => p.id === action.payload.post_id);
-        draft.list[idx].is_like = action.payload.post.is_like;
-        draft.list[idx].like_cnt = action.payload.post.like_cnt;
+        console.log(idx);
+        console.log(draft.list);
+        draft.list[idx].articleLikeItChecker =
+          action.payload.post.articleLikeItChecker;
+        draft.list[idx].articleLikeItCount =
+          action.payload.post.articleLikeItCount;
+      }),
+    [DELETE_POST]: (state, action) =>
+      produce(state, (draft) => {
+        let idx = draft.list.findIndex((p) => p.id === action.payload.post_id);
+        if (idx !== -1) {
+          draft.list.splice(idx, 1);
+        }
       }),
   },
   initialState

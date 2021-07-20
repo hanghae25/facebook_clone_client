@@ -10,8 +10,8 @@ import Reply from "./pages/Reply";
 import MainPage from "./pages/MainPage";
 import Detail from "./pages/Detail";
 
-import { actionCreators as userAction } from "./redux/modules/user";
-import { useSelector, useDispatch } from "react-redux";
+import { actionCreators as userAction } from './redux/modules/user';
+import { useSelector, useDispatch } from 'react-redux';
 
 function App() {
   const dispatch = useDispatch();
