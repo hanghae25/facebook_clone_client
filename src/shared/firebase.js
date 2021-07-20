@@ -1,13 +1,14 @@
-import firebase from "firebase/app";
-import "firebase/storage";
+import firebase from 'firebase/app';
+import 'firebase/storage';
 
 const firebaseConfig = {
-  // apiKey: "AIzaSyA7BCvhCvBfkP-qOXhwtqKI_ctaGOGgY_E",
-  // authDomain: "pet-hospital-booking-service.firebaseapp.com",
-  // projectId: "pet-hospital-booking-service",
-  // storageBucket: "pet-hospital-booking-service.appspot.com",
-  // messagingSenderId: "338018173069",
-  // appId: "1:338018173069:web:4710237788c0736be762c4",
+  apiKey: 'AIzaSyBxhs_De-f5op-3-dW1TJH5Fmjfy8VSwnY',
+  authDomain: 'facebook-clone-63b00.firebaseapp.com',
+  projectId: 'facebook-clone-63b00',
+  storageBucket: 'facebook-clone-63b00.appspot.com',
+  messagingSenderId: '724742266751',
+  appId: '1:724742266751:web:793e29781bfcc5bfb8444a',
+  measurementId: 'G-LMLCX356P4',
 };
 
 firebase.initializeApp(firebaseConfig);
