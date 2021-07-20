@@ -3,22 +3,19 @@ import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 
 import HeartButton from './HeartButton';
+import { actionCreators as postActions } from '../redux/modules/post';
 
-// import Carousel from 'react-gallery-carousel';
-// import 'react-gallery-carousel/dist/index.css';
+// 슬라이드
+import { Swiper, SwiperSlide } from 'swiper/react';
+import SwiperCore, { Navigation, Pagination } from 'swiper';
+import 'swiper/swiper.scss';
+import 'swiper/components/navigation/navigation.scss';
+import 'swiper/components/pagination/pagination.scss';
+SwiperCore.use([Navigation, Pagination]);
 
 const Post = (props) => {
   const dispatch = useDispatch();
-
-  // console.log(props.picture.split(','));
-
-  // const pictures = () => {
-  //   const images = props.picture.split(',').map((img) => ({
-  //     src: img,
-  //   }));
-  //   console.log(images);
-  //   return <Carousel images={images} style={{ height: 500, width: 800 }} />;
-  // };
+  console.log(props);
 
   return (
     <React.Fragment>
@@ -35,7 +32,23 @@ const Post = (props) => {
       </GridBox>
       <GridBox margin="8px 0px" bg="#FFFFFF">
         <Span size="20px">{props.content}</Span>
-        <ImageRec img={props.picture.split(',')[0]}></ImageRec>
+        <div>
+          <Swiper
+            className="banner"
+            spaceBetween={50}
+            slidesPerView={1}
+            navigation
+            pagination={{ clickable: true }}
+          >
+            {props.picture.split(',').map((p) => {
+              return (
+                <SwiperSlide>
+                  <ImageRec img={p}></ImageRec>
+                </SwiperSlide>
+              );
+            })}
+          </Swiper>
+        </div>
       </GridBox>
       <GridBox bg="#FFFFFF" padding="16px" margin="8px 0px">
         <GridBox is_flex spacebetween>
@@ -50,12 +63,12 @@ const Post = (props) => {
         <GridBox is_flex spacebetween>
           <GridBox is_flex flexstart>
             <HeartButton
-              // _onClick={(e) => {
-              //   e.preventDefault();
-              //   e.stopPropagation();
-              //   dispatch(postActions.toggleLikeDB(props.id));
-              // }}
-              is_like={props.is_like}
+              _onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                dispatch(postActions.toggleLikeDB(props.id));
+              }}
+              articleLikeItChecker={props.articleLikeItChecker}
             ></HeartButton>
             <Span size="12px" color="#151515" margin="0px 0px 0px 4px">
               좋아요

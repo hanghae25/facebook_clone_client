@@ -1,12 +1,20 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useHistory } from 'react-router-dom';
 
 const PostWrite = () => {
+  const history = useHistory();
+
   return (
     <React.Fragment>
       <Grid>
         <HeaderLogo logo="https://scontent-gmp1-1.xx.fbcdn.net/v/t1.30497-1/cp0/p80x80/143086968_2856368904622192_1959732218791162458_n.png?_nc_cat=1&ccb=1-3&_nc_sid=7206a8&_nc_ohc=r2DZdUdfmL8AX8zjovP&_nc_ht=scontent-gmp1-1.xx&oh=e4f08ca882056ed291e38268194aa795&oe=60F7CE76"></HeaderLogo>
-        <HeaderInput placeholder="게시글을 작성하세요"></HeaderInput>
+        <HeaderInput
+          placeholder="게시글을 작성하세요"
+          onClick={() => {
+            history.push('/post_write');
+          }}
+        ></HeaderInput>
       </Grid>
     </React.Fragment>
   );

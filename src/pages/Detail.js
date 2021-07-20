@@ -15,9 +15,9 @@ const Detail = () => {
   const post_list = useSelector((state) => state.post.list);
 
   React.useEffect(() => {
-    dispatch(postActioncs.getPostDB());
+    dispatch(postActioncs.getPostMyDB());
   }, []);
-
+  console.log(post_list);
   return (
     <React.Fragment>
       <GridBox>

@@ -23,11 +23,6 @@ const MainPage = () => {
       <GridBox>
         <Header></Header>
         <PostWrite></PostWrite>
-        {/* <Post></Post>
-        <Post></Post>
-        <Post></Post>
-        <Post></Post>
-        <Post></Post> */}
         <GridWhite>
           {post_list.map((p, idx) => {
             return <Post key={p.id} {...p} />;
