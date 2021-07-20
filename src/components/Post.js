@@ -1,6 +1,12 @@
+<<<<<<< HEAD
+import React from "react";
+import styled from "styled-components";
+import { useDispatch, useSelector } from "react-redux";
+=======
 import React from 'react';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
+>>>>>>> add88f9aa65f16a19c7766f621e6fac3cc8bfc87
 
 import HeartButton from './HeartButton';
 import { actionCreators as postAction } from '../redux/modules/post';
@@ -10,6 +16,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 // Import Swiper styles
 const Post = (props) => {
   const dispatch = useDispatch();
+  const loginedUser = useSelector((state) => state.user.user.username);
   const {
     id,
     content,
@@ -40,10 +47,12 @@ const Post = (props) => {
           <PostUserName>{username.replace(/[0-9]/g, '')}</PostUserName>
           <PostDate>{modifiedAt}</PostDate>
         </PostHeaderInfo>
-        <PostControll>
-          <PostUpdate>수정</PostUpdate> /{' '}
-          <PostDelete onClick={() => handleDeletePost(id)}>삭제</PostDelete>
-        </PostControll>
+        {loginedUser === username && (
+          <PostControll>
+            <PostUpdate>수정</PostUpdate> /{" "}
+            <PostDelete onClick={() => handleDeletePost(id)}>삭제</PostDelete>
+          </PostControll>
+        )}
       </PostHeader>
       <PostContent>{content}</PostContent>
       <PostImage src={pictureList[0]}></PostImage>

@@ -2,10 +2,12 @@ import React from "react";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
 import { actionCreators as articleAction } from "../redux/module/article";
-const Mention = () => {
+const Mention = ({ content }) => {
   const dispatch = useDispatch();
   const username = useSelector((state) => state.user.user.username);
 
+  const content2 = content;
+  console.log("content : ", content);
   const handleActicleData = (e) => {
     const article = {
       username: username,
@@ -19,7 +21,9 @@ const Mention = () => {
       <MentionTextArea
         placeholder="무슨 생각을 하고 계신가요?"
         onChange={handleActicleData}
-      ></MentionTextArea>
+      >
+        {content2}
+      </MentionTextArea>
     </MentionBox>
   );
 };
