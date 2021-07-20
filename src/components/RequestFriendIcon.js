@@ -1,18 +1,20 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { actionCreators as friendAction } from "../redux/module/friend";
 import { actionCreators as searchAction } from "../redux/module/search";
+import user from "../redux/modules/user";
 
 const RequestFriendIcon = ({ friendName, requestChecker }) => {
   const dispatch = useDispatch();
 
-  const username = "lee0";
+  const username = useSelector((state) => state.user.user.username);
 
   const requestParam = {
     username,
     friendName,
   };
+
   const handleRequestFriend = () => {
     dispatch(friendAction.requestFriendDB(requestParam));
   };

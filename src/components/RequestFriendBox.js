@@ -13,7 +13,6 @@ const RequestFriendBox = () => {
   );
   const dispatch = useDispatch();
 
-  console.log("requestedFriendList : ", requestedFriendList);
   useEffect(() => {
     dispatch(friendAction.requestedFriendListDB());
   }, []);

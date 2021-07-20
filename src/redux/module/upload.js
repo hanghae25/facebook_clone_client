@@ -2,8 +2,6 @@ import { createAction, handleActions } from "redux-actions";
 import { produce } from "immer";
 
 import { storage } from "../../shared/firebase";
-import instance from "../../shared/firebase";
-import { create } from "lodash";
 import { actionCreators as actionLoading } from "./loading";
 import { actionCreators as articleAction } from "./article";
 

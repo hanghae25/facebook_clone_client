@@ -14,6 +14,7 @@ const getRequestedFriendList = createAction(
 const requestFriendDB = (friend) => {
   return function (dispatch, getState, { history }) {
     instance.post("user/request-friend", friend).then((result) => {
+      console.log("친구요청완료");
       const { friendName } = friend;
       dispatch(
         searchAction.getSearchDetailListDB(friendName.replace(/[0-9]/g, ""))
@@ -37,9 +38,9 @@ const requestCancleFriendDB = (friend) => {
 
 const requestedFriendListDB = () => {
   return function (dispatch, getState, { history }) {
-    let username = "kim3";
+    let username = getState().user.user.username;
     instance.get(`/user/request-friend-list/${username}`).then((result) => {
-      console.log("requestedFriendListDB");
+      console.log("requestedFriendListDB : ", result.data);
       dispatch(getRequestedFriendList(result.data));
     });
   };
@@ -47,26 +48,26 @@ const requestedFriendListDB = () => {
 
 const acceptRequestedFriend = (friendName) => {
   return function (dispatch, getState, { history }) {
-    let username = "kim3";
+    let username = getState().user.user.username;
     const param = {
       username,
       friendName,
     };
     instance.post("/user/accept-friend", param).then(() => {
       console.log("수락완료");
-      // dispatch(requestedFriendListDB());
+      dispatch(requestedFriendListDB());
     });
   };
 };
 
 const declineRequestedFriend = (friendName) => {
   return function (dispatch, getState, { history }) {
-    let username = "kim3";
+    let username = getState().user.user.username;
     instance
       .delete(`/user/decline-friend/${username}/${friendName}`)
       .then(() => {
         console.log("거절완료");
-        // dispatch(requestedFriendListDB());
+        dispatch(requestedFriendListDB());
       });
   };
 };

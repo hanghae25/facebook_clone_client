@@ -17,18 +17,22 @@ const getSearchDetailList = createAction(GET_SEARCH_DETAIL_LIST, (search) => ({
 }));
 const deleteSearchListAll = createAction(DELETE_SEARCH_LIST_ALL);
 const deleteSearchDetailListAll = createAction(DELETE_SEARCH_DETAIL_LIST_ALL);
-const getSearchListDB = (word) => {
+const getSearchListDB = (friendName) => {
   return function (dispatch, getState, { history }) {
-    instance.get(`/user/search/contain-list/${word}`).then((result) => {
-      dispatch(getSearchList(result.data));
-    });
+    const username = getState().user.user.username;
+    instance
+      .get(`/user/search/contain-list/${username}/${friendName}`)
+      .then((result) => {
+        dispatch(getSearchList(result.data));
+      });
   };
 };
 
 const getSearchDetailListDB = (friendName) => {
   return function (dispatch, getState, { history }) {
+    const username = getState().user.user.username;
     instance
-      .get(`/user/search/exact-list/lee0/${friendName}`)
+      .get(`/user/search/exact-list/${username}/${friendName}`)
       .then((result) => {
         const resultData = result.data;
         dispatch(getSearchDetailList(resultData));

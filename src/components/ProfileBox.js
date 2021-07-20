@@ -1,14 +1,16 @@
 import React from "react";
 import styled from "styled-components";
+import { useSelector } from "react-redux";
 
 const ProfileBox = () => {
+  const user = useSelector((state) => state.user.user);
   return (
     <ProfileBoxContainer>
       <ProfileImgBox>
         <ProfileImg></ProfileImg>
       </ProfileImgBox>
       <ProfileRightBox>
-        <ProfileRightText>신승훈</ProfileRightText>
+        <ProfileRightText>{user.username}</ProfileRightText>
       </ProfileRightBox>
     </ProfileBoxContainer>
   );

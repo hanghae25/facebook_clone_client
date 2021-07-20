@@ -9,8 +9,13 @@ import Search from "./module/search";
 import Friend from "./module/friend";
 import Preview from "./module/preview";
 
+// 리듀서 가져오기
+import User from "./modules/user";
+
+// 브라우저 히스토리
 export const history = createBrowserHistory();
 
+// 가져온 리듀서를 루트
 const rootReducer = combineReducers({
   upload: Upload,
   article: Article,
@@ -18,6 +23,7 @@ const rootReducer = combineReducers({
   search: Search,
   friend: Friend,
   preview: Preview,
+  user: User,
   router: connectRouter(history),
 });
 
