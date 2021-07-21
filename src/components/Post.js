@@ -1,13 +1,14 @@
-import React from "react";
-import styled from "styled-components";
-import { useDispatch, useSelector } from "react-redux";
+import React from 'react';
+import styled from 'styled-components';
+import { useDispatch, useSelector } from 'react-redux';
 
-import HeartButton from "./HeartButton";
-import { actionCreators as postAction } from "../redux/modules/post";
-import { actionCreators as articleAction } from "../redux/module/article";
+import HeartButton from './HeartButton';
+import SlideImage from './SlideImage';
+import { actionCreators as postAction } from '../redux/modules/post';
 
-import { Swiper, SwiperSlide } from "swiper/react";
-import { useHistory } from "react-router-dom";
+import { actionCreators as articleAction } from '../redux/module/article';
+
+import { useHistory } from 'react-router-dom';
 
 // Import Swiper styles
 const Post = (props) => {
@@ -23,7 +24,7 @@ const Post = (props) => {
     articleLikeItCount,
     usernamePicture,
   } = props;
-  const pictureList = picture.split(",");
+  const pictureList = picture.split(',');
 
   const handleDeletePost = (id) => {
     dispatch(postAction.deletePostDB(id));
@@ -36,11 +37,11 @@ const Post = (props) => {
           src={
             usernamePicture
               ? usernamePicture
-              : "https://scontent-gmp1-1.xx.fbcdn.net/v/t1.30497-1/143086968_2856368904622192_1959732218791162458_n.png?_nc_cat=1&ccb=1-3&_nc_sid=dbb9e7&efg=eyJpIjoiYiJ9&_nc_ohc=r2DZdUdfmL8AX8zjovP&_nc_ht=scontent-gmp1-1.xx&oh=7c280ce678e39af2493fef764f492917&oe=60F7C4F8"
+              : 'https://scontent-gmp1-1.xx.fbcdn.net/v/t1.30497-1/143086968_2856368904622192_1959732218791162458_n.png?_nc_cat=1&ccb=1-3&_nc_sid=dbb9e7&efg=eyJpIjoiYiJ9&_nc_ohc=r2DZdUdfmL8AX8zjovP&_nc_ht=scontent-gmp1-1.xx&oh=7c280ce678e39af2493fef764f492917&oe=60F7C4F8'
           }
         ></PostHeaderImage>
         <PostHeaderInfo>
-          <PostUserName>{username.replace(/[0-9]/g, "")}</PostUserName>
+          <PostUserName>{username.replace(/[0-9]/g, '')}</PostUserName>
           <PostDate>{modifiedAt}</PostDate>
         </PostHeaderInfo>
         {loginedUser === username && (
@@ -51,17 +52,13 @@ const Post = (props) => {
               }}
             >
               수정
-            </PostUpdate>{" "}
+            </PostUpdate>{' '}
             / <PostDelete onClick={() => handleDeletePost(id)}>삭제</PostDelete>
           </PostControll>
         )}
       </PostHeader>
       <PostContent>{content}</PostContent>
-      <PostImage src={pictureList[0]}></PostImage>
-      {/* {pictureList.map((src) => {
-        return <PostImage src={src}></PostImage>;
-      })} */}
-
+      <SlideImage pictureList={pictureList}></SlideImage>
       <FeedbackBox>
         <FeedbackBoxTop>
           <FeedbackLikeIconBox>
@@ -181,7 +178,7 @@ const FeedbackLikeIconBox = styled.div`
 `;
 
 const FeedbackLikeIcon = styled.div`
-  background-image: url("https://static.xx.fbcdn.net/rsrc.php/v3/yp/r/LMx56u68mFY.png");
+  background-image: url('https://static.xx.fbcdn.net/rsrc.php/v3/yp/r/LMx56u68mFY.png');
   background-size: 104px 315px;
   background-repeat: no-repeat;
   background-position: -68px -243px;
@@ -191,7 +188,7 @@ const FeedbackLikeIcon = styled.div`
 `;
 
 const FeedbackLikeIcon2 = styled.div`
-  background-image: url("https://static.xx.fbcdn.net/rsrc.php/v3/yp/r/LMx56u68mFY.png");
+  background-image: url('https://static.xx.fbcdn.net/rsrc.php/v3/yp/r/LMx56u68mFY.png');
   background-size: 104px 315px;
   background-repeat: no-repeat;
   background-position: -51px -243px;
@@ -222,7 +219,7 @@ const LikeBtnBox = styled.div`
 `;
 
 const LikeIcon = styled.div`
-  background-image: url("https://static.xx.fbcdn.net/rsrc.php/v3/yp/r/LMx56u68mFY.png");
+  background-image: url('https://static.xx.fbcdn.net/rsrc.php/v3/yp/r/LMx56u68mFY.png');
   background-repeat: no-repeat;
   background-size: 104px 315px;
   background-position: 0 -205px;
@@ -232,7 +229,7 @@ const LikeIcon = styled.div`
 `;
 
 const CommentIcon = styled.div`
-  background-image: url("https://static.xx.fbcdn.net/rsrc.php/v3/yp/r/LMx56u68mFY.png");
+  background-image: url('https://static.xx.fbcdn.net/rsrc.php/v3/yp/r/LMx56u68mFY.png');
   background-repeat: no-repeat;
   background-size: 104px 315px;
   background-position: -63px -184px;

@@ -22,12 +22,10 @@ const PostUpdate = () => {
       ? article.picture.split(",")
       : [article.picture];
 
-  test.push(...pictureArray);
-
   useEffect(() => {
     if (pictureArray.length > 1) {
       pictureArray.map((url) => {
-        dispatch(uploadAction.setUploadImageUrlList(pictureArray));
+        dispatch(uploadAction.setUploadImageUrlList(url));
       });
     } else {
       dispatch(uploadAction.setUploadImageUrlList(...pictureArray));
@@ -39,7 +37,7 @@ const PostUpdate = () => {
       <PostWriteHeader></PostWriteHeader>
       <ProfileBox></ProfileBox>
       <Mention content={content}></Mention>
-      <ImgUploadBox></ImgUploadBox>
+      <ImgUploadBox type="update"></ImgUploadBox>
       <SubmitBox type="update"></SubmitBox>
     </Container>
   );

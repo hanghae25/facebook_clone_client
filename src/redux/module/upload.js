@@ -6,6 +6,7 @@ import { actionCreators as actionLoading } from "./loading";
 import { actionCreators as articleAction } from "./article";
 import { actionCreators as profileAction } from "./profile";
 import { actionCreators as postAction } from "../modules/post";
+import { actionCreators as previewAction } from "./preview";
 
 import instance from "../../shared/config";
 
@@ -59,19 +60,23 @@ const uploadImageFB = (type) => {
           _upload.then((snapshot) => {
             snapshot.ref.getDownloadURL().then((url) => {
               if (key === "images") {
+                dispatch(previewAction.deleteAllImagePreview());
+
                 dispatch(setUploadImageUrlList(url));
               } else if (key === "videos") {
                 dispatch(setUploadVideoUrlList(url));
-              }
-              if (type === "add") {
-                dispatch(articleAction.addArticleDB(article));
-              } else {
-                dispatch(articleAction.updateArticleDB(article));
               }
             });
           });
         });
       }
+      setTimeout(() => {
+        if (type === "add") {
+          dispatch(articleAction.addArticleDB(article));
+        } else {
+          dispatch(articleAction.updateArticleDB(article));
+        }
+      }, 4000);
     } else {
       if (type === "add") {
         dispatch(articleAction.addArticleDB(article));

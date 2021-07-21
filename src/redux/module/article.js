@@ -13,7 +13,7 @@ const ADD_ARTICLE = "ADD_ARTICLE";
 const GET_ONE_ARTICLE = "GET_ONE_ARTICLE";
 const initialState = {
   article: {
-    username: "유저이름",
+    username: "김건우1",
     content: "",
   },
   article_list: [],
@@ -38,11 +38,16 @@ const addArticleDB = (article) => {
     const pictureParam = picture.join(",");
     const videoParam = video.join(",");
 
+    console.log("picture: ", picture);
+    console.log("addArticle 실행 ");
+
     const param = {
       ...article,
       picture: pictureParam,
       video: videoParam,
     };
+
+    console.log("param : ", param);
     instance
       .post(`/user/article`, param)
       .then((result) => {
