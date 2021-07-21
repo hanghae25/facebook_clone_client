@@ -1,21 +1,29 @@
-import { createAction, handleActions } from "redux-actions";
-import { produce } from "immer";
+import { createAction, handleActions } from 'redux-actions';
+import { produce } from 'immer';
 
+<<<<<<< HEAD
 import { storage } from "../../shared/firebase";
 import { actionCreators as actionLoading } from "./loading";
 import { actionCreators as articleAction } from "./article";
 import { actionCreators as profileAction } from "./profile";
 import { actionCreators as postAction } from "../modules/post";
 import { actionCreators as previewAction } from "./preview";
+=======
+import { storage } from '../../shared/firebase';
+import { actionCreators as actionLoading } from './loading';
+import { actionCreators as articleAction } from './article';
+import { actionCreators as profileAction } from './profile';
+import { actionCreators as postAction } from '../modules/post';
+>>>>>>> aef01b6bc90d56be743b7f4bda9fff641fb4e84f
 
-import instance from "../../shared/config";
+import instance from '../../shared/config';
 
-const GET_UPLOAD_IMAGE_URL_LIST = "GET_UPLOAD_IMAGE_URL_LIST";
-const SET_UPLOAD_IMAGE_URL_LIST = "SET_UPLOAD_IMAGE_URL_LIST";
-const SET_UPLOAD_VIDEO_URL_LIST = "SET_UPLOAD_VIDEO_URL_LIST";
+const GET_UPLOAD_IMAGE_URL_LIST = 'GET_UPLOAD_IMAGE_URL_LIST';
+const SET_UPLOAD_IMAGE_URL_LIST = 'SET_UPLOAD_IMAGE_URL_LIST';
+const SET_UPLOAD_VIDEO_URL_LIST = 'SET_UPLOAD_VIDEO_URL_LIST';
 
-const DELETE_ONE_UPLOAD_IMAGE_URL_LIST = "DELETE_ONE_UPLOAD_IMAGE_URL_LIST";
-const DELETE_UPLOAD_IMAGE_URL_LIST = "DELETE_UPLOAD_IMAGE_URL_LIST";
+const DELETE_ONE_UPLOAD_IMAGE_URL_LIST = 'DELETE_ONE_UPLOAD_IMAGE_URL_LIST';
+const DELETE_UPLOAD_IMAGE_URL_LIST = 'DELETE_UPLOAD_IMAGE_URL_LIST';
 const initialState = {
   upload_img_url: [],
   upload_video_url: [],
@@ -52,20 +60,32 @@ const uploadImageFB = (type) => {
       for (let key in preview) {
         preview[key].map(({ file }) => {
           let _upload;
-          if (key === "images") {
+          if (key === 'images') {
             _upload = storage.ref(`images/${file.name}`).put(file);
-          } else if (key === "videos") {
+          } else if (key === 'videos') {
             _upload = storage.ref(`videos/${file.name}`).put(file);
           }
           _upload.then((snapshot) => {
             snapshot.ref.getDownloadURL().then((url) => {
+<<<<<<< HEAD
               if (key === "images") {
                 dispatch(previewAction.deleteAllImagePreview());
 
+=======
+              if (key === 'images') {
+>>>>>>> aef01b6bc90d56be743b7f4bda9fff641fb4e84f
                 dispatch(setUploadImageUrlList(url));
-              } else if (key === "videos") {
+              } else if (key === 'videos') {
                 dispatch(setUploadVideoUrlList(url));
               }
+<<<<<<< HEAD
+=======
+              if (type === 'add') {
+                dispatch(articleAction.addArticleDB(article));
+              } else {
+                dispatch(articleAction.updateArticleDB(article));
+              }
+>>>>>>> aef01b6bc90d56be743b7f4bda9fff641fb4e84f
             });
           });
         });
@@ -78,7 +98,7 @@ const uploadImageFB = (type) => {
         }
       }, 4000);
     } else {
-      if (type === "add") {
+      if (type === 'add') {
         dispatch(articleAction.addArticleDB(article));
       } else {
         dispatch(articleAction.updateArticleDB(article));
@@ -97,7 +117,7 @@ const uploadProfileImg = (file) => {
     _upload.then((snapshot) => {
       snapshot.ref.getDownloadURL().then((url) => {
         const param = { picture: url, username };
-        instance.put("user/userprofile/picture", param).then((result) => {
+        instance.put('user/userprofile/picture', param).then((result) => {
           dispatch(profileAction.getProfileImage(url));
           dispatch(actionLoading.setLoading(false));
           dispatch(postAction.getMyPostDB());
@@ -116,7 +136,7 @@ const uploadCoverImg = (file) => {
     _upload.then((snapshot) => {
       snapshot.ref.getDownloadURL().then((url) => {
         const param = { cover: url, username };
-        instance.put("user/userprofile/cover", param).then((result) => {
+        instance.put('user/userprofile/cover', param).then((result) => {
           dispatch(profileAction.getCoverImage(url));
           dispatch(actionLoading.setLoading(false));
         });
