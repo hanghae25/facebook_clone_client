@@ -72,36 +72,25 @@ const toggleLikeDB = (post_id) => {
     const _idx = getState().post.all_post_list.findIndex(
       (p) => p.id === post_id
     );
-    console.log(_idx);
     let _post = getState().post.all_post_list[_idx];
-    console.log(_post);
     let username1 = getState().user.user.username;
     let articleLikeItCount = _post.articleLikeItCount;
     let articleLikeItChecker = _post.articleLikeItChecker;
-    console.log(_idx, _post, articleLikeItCount, articleLikeItChecker);
     instance
       .post("/user/article/likeIt", {
         articleId: post_id,
         username: username1,
       })
       .then((response) => {
-        console.log(response);
-        // if (!response.data.articleLikeIt) {
-        //   window.alert(response.data.msg);
-        //   return;
-        // }
-        console.log(_idx, _post, articleLikeItCount, articleLikeItChecker);
         articleLikeItChecker = articleLikeItChecker === false ? true : false;
         articleLikeItCount =
           articleLikeItChecker === true
             ? articleLikeItCount + 1
             : articleLikeItCount - 1;
-        console.log(_idx, _post, articleLikeItCount, articleLikeItChecker);
         const like_post = {
           articleLikeItCount: articleLikeItCount,
           articleLikeItChecker: articleLikeItChecker,
         };
-        console.log(like_post, post_id);
         dispatch(likeToggle(like_post, post_id));
       });
   };
