@@ -4,21 +4,35 @@ import { ButtonDefaultCss, BlueButtonColor } from "../common_css/style";
 import { useSelector, useDispatch } from "react-redux";
 import { actionCreators as uploadAction } from "../redux/module/upload";
 
-const SubmitBox = () => {
+const SubmitBox = (props) => {
   const dispatch = useDispatch();
 
-  const handleAddArticle = async () => {
-    dispatch(uploadAction.uploadImageFB());
+  const handleAddArticle = (type) => {
+    dispatch(uploadAction.uploadImageFB(type));
+  };
+
+  const handleUpdateArticle = (type) => {
+    dispatch(uploadAction.uploadImageFB(type));
   };
   return (
     <SubmitBoxContainer>
-      <SumbitBtn
-        onClick={() => {
-          handleAddArticle();
-        }}
-      >
-        게시
-      </SumbitBtn>
+      {props.type === "add" ? (
+        <SumbitBtn
+          onClick={() => {
+            handleAddArticle("add");
+          }}
+        >
+          게시
+        </SumbitBtn>
+      ) : (
+        <SumbitBtn
+          onClick={() => {
+            handleUpdateArticle("update");
+          }}
+        >
+          수정
+        </SumbitBtn>
+      )}
     </SubmitBoxContainer>
   );
 };
@@ -32,4 +46,8 @@ const SumbitBtn = styled.button`
   ${BlueButtonColor}
   ${ButtonDefaultCss}
 `;
+
+SubmitBox.defaultProps = {
+  type: "add",
+};
 export default SubmitBox;
