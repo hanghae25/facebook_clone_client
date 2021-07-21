@@ -3,9 +3,8 @@ import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 
 import HeartButton from './HeartButton';
+import SlideImage from './SlideImage';
 import { actionCreators as postAction } from '../redux/modules/post';
-
-import { Swiper, SwiperSlide } from 'swiper/react';
 
 // Import Swiper styles
 const Post = (props) => {
@@ -46,11 +45,7 @@ const Post = (props) => {
         </PostControll>
       </PostHeader>
       <PostContent>{content}</PostContent>
-      <PostImage src={pictureList[0]}></PostImage>
-      {/* {pictureList.map((src) => {
-        return <PostImage src={src}></PostImage>;
-      })} */}
-
+      <SlideImage pictureList={pictureList}></SlideImage>
       <FeedbackBox>
         <FeedbackBoxTop>
           <FeedbackLikeIconBox>
