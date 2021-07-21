@@ -3,14 +3,19 @@ import { produce } from "immer";
 import instance from "../../shared/config";
 import { actionCreators as searchAction } from "./search";
 const REQUESTED_FRIEND_LIST = "REQUESTED_FRIEND_LIST";
+const GET_MY_FRIENDS = "GET_MY_FRIENDS";
 const initailState = {
   requested_friend_list: [],
+  my_friend_list: [],
 };
 
 const getRequestedFriendList = createAction(
   REQUESTED_FRIEND_LIST,
   (friend) => ({ friend })
 );
+
+const getMyFriendList = createAction(GET_MY_FRIENDS, (friend) => ({ friend }));
+
 const requestFriendDB = (friend) => {
   return function (dispatch, getState, { history }) {
     instance.post("user/request-friend", friend).then((result) => {
@@ -27,7 +32,7 @@ const requestCancleFriendDB = (friend) => {
   return function (dispatch, getState, { history }) {
     const { username, friendName } = friend;
     instance
-      .delete(`user/decline-friend/${username}/${friendName}`)
+      .delete(`user/decline-friend/given/${username}/${friendName}`)
       .then((result) => {
         dispatch(
           searchAction.getSearchDetailListDB(friendName.replace(/[0-9]/g, ""))
@@ -39,10 +44,12 @@ const requestCancleFriendDB = (friend) => {
 const requestedFriendListDB = () => {
   return function (dispatch, getState, { history }) {
     let username = getState().user.user.username;
-    instance.get(`/user/request-friend-list/${username}`).then((result) => {
-      console.log("requestedFriendListDB : ", result.data);
-      dispatch(getRequestedFriendList(result.data));
-    });
+    instance
+      .get(`/user/request-friend-list/received/${username}`)
+      .then((result) => {
+        console.log("requestedFriendListDB : ", result.data);
+        dispatch(getRequestedFriendList(result.data));
+      });
   };
 };
 
@@ -64,11 +71,21 @@ const declineRequestedFriend = (friendName) => {
   return function (dispatch, getState, { history }) {
     let username = getState().user.user.username;
     instance
-      .delete(`/user/decline-friend/${username}/${friendName}`)
+      .delete(`/user/decline-friend/received/${username}/${friendName}`)
       .then(() => {
         console.log("거절완료");
         dispatch(requestedFriendListDB());
       });
+  };
+};
+
+const getMyFriendListDB = () => {
+  return function (dispatch, getState, { history }) {
+    let username = getState().user.user.username;
+    instance.get(`user/friends/${username}`).then((result) => {
+      console.log("result", result.data);
+      dispatch(getMyFriendList(result.data.friends));
+    });
   };
 };
 
@@ -77,6 +94,10 @@ export default handleActions(
     [REQUESTED_FRIEND_LIST]: (state, action) =>
       produce(state, (draft) => {
         draft.requested_friend_list = action.payload.friend;
+      }),
+    [GET_MY_FRIENDS]: (state, action) =>
+      produce(state, (draft) => {
+        draft.my_friend_list = action.payload.friend;
       }),
   },
   initailState
@@ -88,6 +109,7 @@ const actionCreators = {
   requestedFriendListDB,
   acceptRequestedFriend,
   declineRequestedFriend,
+  getMyFriendListDB,
 };
 
 export { actionCreators };

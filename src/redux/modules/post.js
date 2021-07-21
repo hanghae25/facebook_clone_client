@@ -1,110 +1,141 @@
-import { createAction, handleActions } from 'redux-actions';
-import { produce } from 'immer';
-import instance from '../../shared/config';
+import { createAction, handleActions } from "redux-actions";
+import { produce } from "immer";
+import instance from "../../shared/config";
 
 // action type
-const SET_POST = 'SET_POST';
-const LIKE_TOGGLE = 'LIKE_TOGGLE';
+const SET_MY_POST = "SET_MY_POST";
+const SET_ALL_POST = "SET_ALL_POST";
+const LIKE_TOGGLE = "LIKE_TOGGLE";
+const DELETE_POST = "DELETE_POST";
 
 // action creator
-const setPost = createAction(SET_POST, (post_list) => ({ post_list }));
-const likeToggle = createAction(LIKE_TOGGLE, (post_id, is_like = null) => ({
+const setMyPost = createAction(SET_MY_POST, (post_list) => ({ post_list }));
+const setAllPost = createAction(SET_ALL_POST, (post_list) => ({ post_list }));
+
+const likeToggle = createAction(LIKE_TOGGLE, (post, post_id) => ({
+  post,
   post_id,
-  is_like,
 }));
+const deletePost = createAction(DELETE_POST, (post_id) => ({ post_id }));
 
 // initialState
 const initialState = {
+  my_post_list: [],
+  all_post_list: [],
   list: [],
+  articleLikeItCount: 0,
+  articleLikeItChecker: false,
 };
 
-
+const initialPost = {};
 
 // middleware actions
-const getPostDB = () => {
+const getMyPostDB = () => {
   return function (dispatch, getState, { history }) {
+    let username = getState().user.user.username;
     instance
-      .get('/user/article/lee/2/8')
-      .then((docs) => {
-        let post_list = [];
-        docs.data.content.forEach((doc) => {
-          // console.log(doc.id, doc);
-          post_list.push(doc);
-        });
-
-        console.log(post_list);
-        dispatch(setPost(post_list));
+      .get(`/user/my-article/${username}/1/20`)
+      .then((result) => {
+        dispatch(setMyPost(result.data.content));
       })
       .catch((err) => {
-        console.log('에러: ', err);
+        console.log("에러: ", err);
       });
   };
 };
 
-const toggleLikeDB = (post_id, username) => {
-  return function (dispatch, getState) {
-    const _idx = getState().post.list.findIndex((p) => p.id === post_id);
-    let _post = getState().post.list[_idx];
-    let like_cnt = _post.like_cnt;
-    let is_like = _post.is_like;
-
+const getAllPostDB = () => {
+  return function (dispatch, getState, { history }) {
+    let username = getState().user.user.username;
     instance
-      .post(
-        '/user/article/likeIt',
-        {
-          articleId: post_id,
-          username: 'lee',
-        }
-        // { withCredentials: true }
-      )
-      .then((response) => {
-        if (!response.data.res) {
-          window.alert(response.data.msg);
-          return;
-        }
-        is_like = is_like === false ? true : false;
-        like_cnt = is_like === true ? like_cnt + 1 : like_cnt - 1;
+      .get(`/user/all-article/${username}/1/20`)
+      .then((result) => {
+        dispatch(setAllPost(result.data.content));
+      })
+      .catch((err) => {
+        console.log("에러: ", err);
+      });
+  };
+};
 
+const deletePostDB = (articleId) => {
+  return function (dispatch, getState, { history }) {
+    instance.delete(`user/article/${articleId}`).then(() => {
+      dispatch(getMyPostDB());
+      dispatch(getAllPostDB());
+      console.log("삭제완료");
+    });
+  };
+};
+const toggleLikeDB = (post_id) => {
+  return function (dispatch, getState) {
+    const _idx = getState().post.all_post_list.findIndex(
+      (p) => p.id === post_id
+    );
+    console.log(_idx);
+    let _post = getState().post.all_post_list[_idx];
+    console.log(_post);
+    let username1 = getState().user.user.username;
+    let articleLikeItCount = _post.articleLikeItCount;
+    let articleLikeItChecker = _post.articleLikeItChecker;
+    console.log(_idx, _post, articleLikeItCount, articleLikeItChecker);
+    instance
+      .post("/user/article/likeIt", {
+        articleId: post_id,
+        username: username1,
+      })
+      .then((response) => {
+        console.log(response);
+        // if (!response.data.articleLikeIt) {
+        //   window.alert(response.data.msg);
+        //   return;
+        // }
+        console.log(_idx, _post, articleLikeItCount, articleLikeItChecker);
+        articleLikeItChecker = articleLikeItChecker === false ? true : false;
+        articleLikeItCount =
+          articleLikeItChecker === true
+            ? articleLikeItCount + 1
+            : articleLikeItCount - 1;
+        console.log(_idx, _post, articleLikeItCount, articleLikeItChecker);
         const like_post = {
-          like_cnt: like_cnt,
-          is_like: is_like,
+          articleLikeItCount: articleLikeItCount,
+          articleLikeItChecker: articleLikeItChecker,
         };
+        console.log(like_post, post_id);
         dispatch(likeToggle(like_post, post_id));
       });
   };
 };
 
-// const getOnePostDB = (post_id) => {
-//   return function(dispatch, getState, {history}) {
-//     instance
-//     .get(`/user​/article​/${username}​/2`)
-//     .then((response)=>{
-//     });
-//   }
-// }
-
 // reducer
 export default handleActions(
   {
-    [SET_POST]: (state, action) =>
+    [SET_MY_POST]: (state, action) =>
       produce(state, (draft) => {
-        draft.list = action.payload.post_list;
-
-         // post_id가 같은 중복 항목을 제거
-         draft.list = draft.list.reduce((acc, cur) => {
-          if (acc.findIndex((a) => a.id === cur.post_id) === -1){
-            return [...acc, cur];
-          }else{
-            acc[acc.findIndex((a) => a.id === cur.post_id)] = cur;
-            return acc;
-          }
-        }, []);
+        draft.my_post_list = action.payload.post_list;
+      }),
+    [SET_ALL_POST]: (state, action) =>
+      produce(state, (draft) => {
+        draft.all_post_list = action.payload.post_list;
       }),
     [LIKE_TOGGLE]: (state, action) =>
       produce(state, (draft) => {
+        let idx = draft.all_post_list.findIndex(
+          (p) => p.id === action.payload.post_id
+        );
+        console.log(idx);
+        console.log(draft.all_post_list[idx]);
+        draft.all_post_list[idx].articleLikeItChecker =
+          action.payload.post.articleLikeItChecker;
+        draft.all_post_list[idx].articleLikeItCount =
+          action.payload.post.articleLikeItCount;
+      }),
+    [DELETE_POST]: (state, action) =>
+      produce(state, (draft) => {
         let idx = draft.list.findIndex((p) => p.id === action.payload.post_id);
-        draft.list[idx].is_like = action.payload.post.is_like;
-        draft.list[idx].like_cnt = action.payload.post.like_cnt;
+        if (idx !== -1) {
+          draft.list.splice(idx, 1);
+        }
       }),
   },
   initialState
@@ -112,10 +143,11 @@ export default handleActions(
 
 //action creator export
 const actionCreators = {
-  setPost,
-  getPostDB,
-  // getOnePostDB,
+  setMyPost,
+  getMyPostDB,
+  getAllPostDB,
   toggleLikeDB,
+  deletePostDB,
 };
 
 export { actionCreators };

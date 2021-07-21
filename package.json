@@ -18,6 +18,7 @@
     "jwt-decode": "^3.1.2",
     "moment": "^2.29.1",
     "react": "^17.0.2",
+    "react-bootstrap": "^1.6.1",
     "react-core-loading-spinner": "^1.0.2",
     "react-dom": "^17.0.2",
     "react-gallery-carousel": "^0.2.3",
@@ -29,7 +30,9 @@
     "redux-actions": "^2.6.5",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
+    "sass": "^1.35.2",
     "styled-components": "^5.3.0",
+    "swiper": "^6.7.5",
     "web-vitals": "^1.0.1"
   },
   "scripts": {

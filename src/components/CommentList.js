@@ -45,7 +45,6 @@ CommentList.defaultProps = {
 export default CommentList;
 
 const CommentItem = (props) => {
-
     
     return (
         <Grid is_flex>
@@ -65,7 +64,7 @@ const CommentItem = (props) => {
 
 CommentItem.defaultProps = {
     user_profile: "",
-    user_name: "mean0",
+    user_name: "hihi",
     user_id: "",
     post_id: 1,
     contents: "페이스북 클론코딩",

@@ -12,19 +12,18 @@ import { actionCreators as postActioncs } from '../redux/modules/post';
 const Detail = () => {
   const dispatch = useDispatch();
 
-  const post_list = useSelector((state) => state.post.list);
+  const my_post_list = useSelector((state) => state.post.my_post_list);
 
   React.useEffect(() => {
-    dispatch(postActioncs.getPostDB());
+    dispatch(postActioncs.getMyPostDB());
   }, []);
-
   return (
     <React.Fragment>
       <GridBox>
         <Header></Header>
         <Profile></Profile>
         <PostWrite></PostWrite>
-        {post_list.map((p, idx) => {
+        {my_post_list.map((p, idx) => {
           return <Post key={p.id} {...p} />;
         })}
       </GridBox>

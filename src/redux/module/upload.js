@@ -4,6 +4,8 @@ import { produce } from "immer";
 import { storage } from "../../shared/firebase";
 import { actionCreators as actionLoading } from "./loading";
 import { actionCreators as articleAction } from "./article";
+import { actionCreators as profileAction } from "./profile";
+import instance from "../../shared/config";
 
 const GET_UPLOAD_IMAGE_URL_LIST = "GET_UPLOAD_IMAGE_URL_LIST";
 const SET_UPLOAD_IMAGE_URL_LIST = "SET_UPLOAD_IMAGE_URL_LIST";
@@ -69,6 +71,48 @@ const uploadImageFB = (article) => {
     }
   };
 };
+
+const uploadProfileImg = (file) => {
+  return function (dispatch, getState, { history }) {
+    dispatch(actionLoading.setLoading(true));
+
+    let _upload = storage.ref(`images/${file.name}`).put(file);
+    let username = getState().user.user.username;
+
+    _upload.then((snapshot) => {
+      snapshot.ref.getDownloadURL().then((url) => {
+        console.log("url : ", url);
+        const param = { picture: url, username };
+        instance.put("user/userprofile/picture", param).then((result) => {
+          console.log("프로필 이미지 업로드완료");
+          dispatch(profileAction.getProfileImage(url));
+          dispatch(actionLoading.setLoading(false));
+        });
+      });
+    });
+  };
+};
+
+const uploadCoverImg = (file) => {
+  return function (dispatch, getState, { history }) {
+    dispatch(actionLoading.setLoading(true));
+
+    let _upload = storage.ref(`images/${file.name}`).put(file);
+    let username = getState().user.user.username;
+    _upload.then((snapshot) => {
+      snapshot.ref.getDownloadURL().then((url) => {
+        console.log("url : ", url);
+        const param = { cover: url, username };
+        instance.put("user/userprofile/cover", param).then((result) => {
+          console.log("커버 이미지 업로드완료");
+          dispatch(profileAction.getCoverImage(url));
+          dispatch(actionLoading.setLoading(false));
+        });
+      });
+    });
+  };
+};
+
 export default handleActions(
   {
     [GET_UPLOAD_IMAGE_URL_LIST]: (state, action) =>
@@ -102,6 +146,8 @@ const actionCreators = {
   setUploadImageUrlList,
   deleteUploadImageUrlList,
   deleteOneUploadImageUrlList,
+  uploadProfileImg,
+  uploadCoverImg,
 };
 
 export { actionCreators };
