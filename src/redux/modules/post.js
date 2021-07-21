@@ -7,7 +7,6 @@ const SET_MY_POST = 'SET_MY_POST';
 const SET_ALL_POST = 'SET_ALL_POST';
 const LIKE_TOGGLE = 'LIKE_TOGGLE';
 const DELETE_POST = 'DELETE_POST';
-const RESET_ALL_LIST = 'RESET_ALL_LIST';
 
 // action creator
 const setMyPost = createAction(SET_MY_POST, (post_list) => ({ post_list }));
@@ -125,12 +124,6 @@ const toggleLikeDB = (post_id) => {
   };
 };
 
-// const resetList = () => {
-//   return function (dispatch, getState, { history }) {
-//     getState().post.all_post_list = [];
-//   };
-// };
-
 // reducer
 export default handleActions(
   {
@@ -146,8 +139,6 @@ export default handleActions(
       }),
     [LIKE_TOGGLE]: (state, action) =>
       produce(state, (draft) => {
-        // draft.all_post_list = [];
-
         if (draft.all_post_list.length !== 0) {
           let idx = draft.all_post_list.findIndex(
             (p) => p.id === action.payload.post_id
