@@ -1,6 +1,8 @@
 import React from "react";
 import { Route } from "react-router-dom";
 import PostWrite from "./pages/PostWrite";
+import PostUpdate from "./pages/PostUpdate";
+
 import Search from "./pages/Search";
 import RequestFriend from "./pages/RequestFriend";
 import LoadingSpinner from "../src/components/LoadingSpinner";
@@ -10,8 +12,8 @@ import Reply from "./pages/Reply";
 import MainPage from "./pages/MainPage";
 import Detail from "./pages/Detail";
 
-import { actionCreators as userAction } from './redux/modules/user';
-import { useSelector, useDispatch } from 'react-redux';
+import { actionCreators as userAction } from "./redux/modules/user";
+import { useSelector, useDispatch } from "react-redux";
 
 function App() {
   const dispatch = useDispatch();
@@ -23,6 +25,8 @@ function App() {
       <Route path="/" exact component={MainPage} />
       <Route path="/detail" exact component={Detail} />
       <Route path="/post_write" component={PostWrite}></Route>
+      <Route path="/post_update" component={PostUpdate}></Route>
+
       <Route path="/search" component={Search}></Route>
       <Route path="/request_friend" component={RequestFriend}></Route>
       <Route path="/login" exact component={Login} />

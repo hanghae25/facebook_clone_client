@@ -12,8 +12,6 @@ const RequestFriendBox = () => {
     (state) => state.friend.requested_friend_list
   );
 
-  console.log("requestedFriendList : ", requestedFriendList);
-
   const myFriendList = useSelector((state) => state.friend.my_friend_list);
   const dispatch = useDispatch();
 

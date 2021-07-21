@@ -1,12 +1,12 @@
-import { createAction, handleActions } from 'redux-actions';
-import { produce } from 'immer';
-import instance from '../../shared/config';
+import { createAction, handleActions } from "redux-actions";
+import { produce } from "immer";
+import instance from "../../shared/config";
 
 // action type
-const SET_MY_POST = 'SET_MY_POST';
-const SET_ALL_POST = 'SET_ALL_POST';
-const LIKE_TOGGLE = 'LIKE_TOGGLE';
-const DELETE_POST = 'DELETE_POST';
+const SET_MY_POST = "SET_MY_POST";
+const SET_ALL_POST = "SET_ALL_POST";
+const LIKE_TOGGLE = "LIKE_TOGGLE";
+const DELETE_POST = "DELETE_POST";
 
 // action creator
 const setMyPost = createAction(SET_MY_POST, (post_list) => ({ post_list }));
@@ -39,7 +39,7 @@ const getMyPostDB = () => {
         dispatch(setMyPost(result.data.content));
       })
       .catch((err) => {
-        console.log('에러: ', err);
+        console.log("에러: ", err);
       });
   };
 };
@@ -53,7 +53,7 @@ const getAllPostDB = () => {
         dispatch(setAllPost(result.data.content));
       })
       .catch((err) => {
-        console.log('에러: ', err);
+        console.log("에러: ", err);
       });
   };
 };
@@ -62,7 +62,8 @@ const deletePostDB = (articleId) => {
   return function (dispatch, getState, { history }) {
     instance.delete(`user/article/${articleId}`).then(() => {
       dispatch(getMyPostDB());
-      console.log('삭제완료');
+      dispatch(getAllPostDB());
+      console.log("삭제완료");
     });
   };
 };
@@ -79,7 +80,7 @@ const toggleLikeDB = (post_id) => {
     let articleLikeItChecker = _post.articleLikeItChecker;
     console.log(_idx, _post, articleLikeItCount, articleLikeItChecker);
     instance
-      .post('/user/article/likeIt', {
+      .post("/user/article/likeIt", {
         articleId: post_id,
         username: username1,
       })

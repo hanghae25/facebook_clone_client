@@ -1,14 +1,19 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import HeartButton from './HeartButton';
 import SlideImage from './SlideImage';
 import { actionCreators as postAction } from '../redux/modules/post';
 
+import { actionCreators as articleAction } from '../redux/module/article';
+
+import { useHistory } from 'react-router-dom';
+
 // Import Swiper styles
 const Post = (props) => {
   const dispatch = useDispatch();
+  const loginedUser = useSelector((state) => state.user.user.username);
   const {
     id,
     content,
@@ -39,10 +44,18 @@ const Post = (props) => {
           <PostUserName>{username.replace(/[0-9]/g, '')}</PostUserName>
           <PostDate>{modifiedAt}</PostDate>
         </PostHeaderInfo>
-        <PostControll>
-          <PostUpdate>수정</PostUpdate> /{' '}
-          <PostDelete onClick={() => handleDeletePost(id)}>삭제</PostDelete>
-        </PostControll>
+        {loginedUser === username && (
+          <PostControll>
+            <PostUpdate
+              onClick={() => {
+                dispatch(articleAction.getOneArticleDB(id));
+              }}
+            >
+              수정
+            </PostUpdate>{' '}
+            / <PostDelete onClick={() => handleDeletePost(id)}>삭제</PostDelete>
+          </PostControll>
+        )}
       </PostHeader>
       <PostContent>{content}</PostContent>
       <SlideImage pictureList={pictureList}></SlideImage>

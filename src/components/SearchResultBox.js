@@ -11,8 +11,6 @@ const SearchResultBox = () => {
     (state) => state.search.search_detail_list
   );
 
-  console.log("search_detail_list : ", search_detail_list);
-
   return (
     <SearchResultBoxContainer>
       {search_detail_list.map(
