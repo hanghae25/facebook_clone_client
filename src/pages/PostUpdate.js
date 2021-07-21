@@ -8,6 +8,7 @@ import SubmitBox from "../components/SubmitBox";
 import { useSelector, useDispatch } from "react-redux";
 import { actionCreators as imageAction } from "../redux/module/upload";
 import { actionCreators as articleAction } from "../redux/module/article";
+import { actionCreators as uploadAction } from "../redux/module/upload";
 import { useParams } from "react-router-dom";
 const PostUpdate = () => {
   const dispatch = useDispatch();
@@ -15,10 +16,22 @@ const PostUpdate = () => {
   const { id } = useParams();
   const article = useSelector((state) => state.article.one_article);
   const { content, picture } = article;
+  const test = [];
+  const pictureArray =
+    article.picture.indexOf(",") !== -1
+      ? article.picture.split(",")
+      : [article.picture];
+
+  test.push(...pictureArray);
 
   useEffect(() => {
-    dispatch(articleAction.getOneArticleDB(id));
-    return dispatch(imageAction.deleteUploadImageUrlList());
+    if (pictureArray.length > 1) {
+      pictureArray.map((url) => {
+        dispatch(uploadAction.setUploadImageUrlList(pictureArray));
+      });
+    } else {
+      dispatch(uploadAction.setUploadImageUrlList(...pictureArray));
+    }
   }, []);
 
   return (
@@ -27,7 +40,7 @@ const PostUpdate = () => {
       <ProfileBox></ProfileBox>
       <Mention content={content}></Mention>
       <ImgUploadBox></ImgUploadBox>
-      <SubmitBox></SubmitBox>
+      <SubmitBox type="update"></SubmitBox>
     </Container>
   );
 };

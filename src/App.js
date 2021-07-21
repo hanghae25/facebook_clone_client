@@ -25,7 +25,7 @@ function App() {
       <Route path="/" exact component={MainPage} />
       <Route path="/detail" exact component={Detail} />
       <Route path="/post_write" component={PostWrite}></Route>
-      <Route path="/post_update/:id" component={PostUpdate}></Route>
+      <Route path="/post_update" component={PostUpdate}></Route>
 
       <Route path="/search" component={Search}></Route>
       <Route path="/request_friend" component={RequestFriend}></Route>

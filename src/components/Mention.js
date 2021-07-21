@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
 import { actionCreators as articleAction } from "../redux/module/article";
@@ -6,8 +6,6 @@ const Mention = ({ content }) => {
   const dispatch = useDispatch();
   const username = useSelector((state) => state.user.user.username);
 
-  const content2 = content;
-  console.log("content : ", content);
   const handleActicleData = (e) => {
     const article = {
       username: username,
@@ -16,13 +14,14 @@ const Mention = ({ content }) => {
 
     dispatch(articleAction.setArticle(article));
   };
+
   return (
     <MentionBox>
       <MentionTextArea
         placeholder="무슨 생각을 하고 계신가요?"
         onChange={handleActicleData}
       >
-        {content2}
+        {content}
       </MentionTextArea>
     </MentionBox>
   );

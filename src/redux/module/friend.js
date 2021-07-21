@@ -19,7 +19,6 @@ const getMyFriendList = createAction(GET_MY_FRIENDS, (friend) => ({ friend }));
 const requestFriendDB = (friend) => {
   return function (dispatch, getState, { history }) {
     instance.post("user/request-friend", friend).then((result) => {
-      console.log("친구요청완료");
       const { friendName } = friend;
       dispatch(
         searchAction.getSearchDetailListDB(friendName.replace(/[0-9]/g, ""))
@@ -47,7 +46,6 @@ const requestedFriendListDB = () => {
     instance
       .get(`/user/request-friend-list/received/${username}`)
       .then((result) => {
-        console.log("requestedFriendListDB : ", result.data);
         dispatch(getRequestedFriendList(result.data));
       });
   };
@@ -61,7 +59,6 @@ const acceptRequestedFriend = (friendName) => {
       friendName,
     };
     instance.post("/user/accept-friend", param).then(() => {
-      console.log("수락완료");
       dispatch(requestedFriendListDB());
     });
   };
@@ -73,7 +70,6 @@ const declineRequestedFriend = (friendName) => {
     instance
       .delete(`/user/decline-friend/received/${username}/${friendName}`)
       .then(() => {
-        console.log("거절완료");
         dispatch(requestedFriendListDB());
       });
   };
@@ -83,7 +79,6 @@ const getMyFriendListDB = () => {
   return function (dispatch, getState, { history }) {
     let username = getState().user.user.username;
     instance.get(`user/friends/${username}`).then((result) => {
-      console.log("result", result.data);
       dispatch(getMyFriendList(result.data.friends));
     });
   };

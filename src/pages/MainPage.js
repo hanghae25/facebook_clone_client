@@ -13,7 +13,6 @@ const MainPage = () => {
 
   const post_list = useSelector((state) => state.post.all_post_list);
 
-  console.log("post_list : ", post_list);
   React.useEffect(() => {
     dispatch(postAction.getAllPostDB());
   }, []);
