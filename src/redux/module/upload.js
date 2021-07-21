@@ -1,11 +1,20 @@
 import { createAction, handleActions } from 'redux-actions';
 import { produce } from 'immer';
 
+<<<<<<< HEAD
+import { storage } from "../../shared/firebase";
+import { actionCreators as actionLoading } from "./loading";
+import { actionCreators as articleAction } from "./article";
+import { actionCreators as profileAction } from "./profile";
+import { actionCreators as postAction } from "../modules/post";
+import { actionCreators as previewAction } from "./preview";
+=======
 import { storage } from '../../shared/firebase';
 import { actionCreators as actionLoading } from './loading';
 import { actionCreators as articleAction } from './article';
 import { actionCreators as profileAction } from './profile';
 import { actionCreators as postAction } from '../modules/post';
+>>>>>>> aef01b6bc90d56be743b7f4bda9fff641fb4e84f
 
 import instance from '../../shared/config';
 
@@ -58,20 +67,36 @@ const uploadImageFB = (type) => {
           }
           _upload.then((snapshot) => {
             snapshot.ref.getDownloadURL().then((url) => {
+<<<<<<< HEAD
+              if (key === "images") {
+                dispatch(previewAction.deleteAllImagePreview());
+
+=======
               if (key === 'images') {
+>>>>>>> aef01b6bc90d56be743b7f4bda9fff641fb4e84f
                 dispatch(setUploadImageUrlList(url));
               } else if (key === 'videos') {
                 dispatch(setUploadVideoUrlList(url));
               }
+<<<<<<< HEAD
+=======
               if (type === 'add') {
                 dispatch(articleAction.addArticleDB(article));
               } else {
                 dispatch(articleAction.updateArticleDB(article));
               }
+>>>>>>> aef01b6bc90d56be743b7f4bda9fff641fb4e84f
             });
           });
         });
       }
+      setTimeout(() => {
+        if (type === "add") {
+          dispatch(articleAction.addArticleDB(article));
+        } else {
+          dispatch(articleAction.updateArticleDB(article));
+        }
+      }, 4000);
     } else {
       if (type === 'add') {
         dispatch(articleAction.addArticleDB(article));

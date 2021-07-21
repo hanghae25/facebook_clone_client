@@ -70,6 +70,32 @@ const deletePostDB = (articleId) => {
 
 const toggleLikeDB = (post_id) => {
   return function (dispatch, getState) {
+<<<<<<< HEAD
+    const _idx = getState().post.all_post_list.findIndex(
+      (p) => p.id === post_id
+    );
+    let _post = getState().post.all_post_list[_idx];
+    let username1 = getState().user.user.username;
+    let articleLikeItCount = _post.articleLikeItCount;
+    let articleLikeItChecker = _post.articleLikeItChecker;
+    instance
+      .post("/user/article/likeIt", {
+        articleId: post_id,
+        username: username1,
+      })
+      .then((response) => {
+        articleLikeItChecker = articleLikeItChecker === false ? true : false;
+        articleLikeItCount =
+          articleLikeItChecker === true
+            ? articleLikeItCount + 1
+            : articleLikeItCount - 1;
+        const like_post = {
+          articleLikeItCount: articleLikeItCount,
+          articleLikeItChecker: articleLikeItChecker,
+        };
+        dispatch(likeToggle(like_post, post_id));
+      });
+=======
     if (getState().post.all_post_list.length !== 0) {
       const _idx = getState().post.all_post_list.findIndex(
         (p) => p.id === post_id
@@ -121,6 +147,7 @@ const toggleLikeDB = (post_id) => {
           dispatch(likeToggle(like_post, post_id));
         });
     }
+>>>>>>> aef01b6bc90d56be743b7f4bda9fff641fb4e84f
   };
 };
 

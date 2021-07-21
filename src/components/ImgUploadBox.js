@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { actionCreators as uploadAction } from "../redux/module/upload";
 import { actionCreators as previewActions } from "../redux/module/preview";
 
-const ImgUploadBox = () => {
+const ImgUploadBox = (props) => {
   const imageInput = useRef();
   const videoInput = useRef();
   const dispatch = useDispatch();
@@ -59,18 +59,19 @@ const ImgUploadBox = () => {
   }, []);
   return (
     <ImgUploadBoxContainer>
-      {uploadedImageUrl.map((src) => {
-        return (
-          <UploadedImgBox>
-            <UploadedImg src={src}></UploadedImg>
-            <UploadedImgDelete
-              onClick={(src) => {
-                handleDeleteUploadedImg(src);
-              }}
-            ></UploadedImgDelete>
-          </UploadedImgBox>
-        );
-      })}
+      {props.type === "update" &&
+        uploadedImageUrl.map((src) => {
+          return (
+            <UploadedImgBox>
+              <UploadedImg src={src}></UploadedImg>
+              <UploadedImgDelete
+                onClick={(src) => {
+                  handleDeleteUploadedImg(src);
+                }}
+              ></UploadedImgDelete>
+            </UploadedImgBox>
+          );
+        })}
       {imagePreview.map(({ preview }) => {
         return (
           <UploadedImgBox>
@@ -195,4 +196,8 @@ const ImgUploadPlus = styled.div`
 const ImgUploadText = styled.div`
   color: #c9ccd3;
 `;
+
+ImgUploadBox.defaultProps = {
+  type: "write",
+};
 export default ImgUploadBox;
