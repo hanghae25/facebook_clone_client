@@ -10,7 +10,7 @@ const SET_IMAGE_PREVIEW = "SET_IMAGE_PREVIEW";
 const SET_VIDEO_PREVIEW = "SET_VIDEO_PREVIEW";
 const DELETE_ONE_IMAGE_PREVIEW = "DELETE_ONE_IMAGE_PREVIEW";
 const DELETE_ONE_VIDEO_PREVIEW = "DELETE_ONE_VIDEO_PREVIEW";
-
+const DELETE_ALL_IMAGE_PREVIEW = "DELETE_ALL_IMAGE_PREVIEW";
 const initialState = {
   images: [],
   videos: [],
@@ -26,6 +26,8 @@ const deleteOneVideoPreview = createAction(
   DELETE_ONE_VIDEO_PREVIEW,
   (video) => ({ video })
 );
+
+const deleteAllImagePreview = createAction(DELETE_ALL_IMAGE_PREVIEW);
 export default handleActions(
   {
     [SET_IMAGE_PREVIEW]: (state, action) =>
@@ -44,6 +46,10 @@ export default handleActions(
       produce(state, (draft) => {
         draft.videos.splice(state.videos.indexOf(action.payload.video), 1);
       }),
+    [DELETE_ALL_IMAGE_PREVIEW]: (state, action) =>
+      produce(state, (draft) => {
+        draft.images = [];
+      }),
   },
   initialState
 );
@@ -53,6 +59,7 @@ const actionCreators = {
   setVideoPreview,
   deleteOneImagePreview,
   deleteOneVideoPreview,
+  deleteAllImagePreview,
 };
 
 export { actionCreators };

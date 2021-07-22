@@ -1,11 +1,11 @@
-import { createAction, handleActions } from 'redux-actions';
-import { produce } from 'immer';
-import { storage } from '../../shared/firebase';
+import { createAction, handleActions } from "redux-actions";
+import { produce } from "immer";
+import { storage } from "../../shared/firebase";
 
 //action type
-const UPLOADING = 'UPLOADING';
-const UPLOAD_IMAGE = 'UPLOAD_IMAGE';
-const SET_PREVIEW = 'SET_PREVIEW';
+const UPLOADING = "UPLOADING";
+const UPLOAD_IMAGE = "UPLOAD_IMAGE";
+const SET_PREVIEW = "SET_PREVIEW";
 
 //action creator
 const uploading = createAction(UPLOADING, (uploading) => ({ uploading }));
@@ -14,7 +14,7 @@ const setPreview = createAction(SET_PREVIEW, (preview) => ({ preview }));
 
 // initialState
 const initailState = {
-  image_url: '',
+  image_url: "",
   uploading: false,
   preview: null,
 };
@@ -30,7 +30,6 @@ const uploadImageFB = (image) => {
 
       snapshot.ref.getDownloadURL().then((downloadURL) => {
         dispatch(uploadImage(downloadURL));
-        console.log('url: ', downloadURL);
       });
     });
   };

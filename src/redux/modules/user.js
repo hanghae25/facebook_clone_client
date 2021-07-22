@@ -22,11 +22,9 @@ const initialState = {
 const loginAPI = (emailAddress, password) => {
   return function (dispatch, getState, { history }) {
     const user_login = { emailAddress, password };
-    console.log(user_login);
     instance
       .post("user/login", user_login)
       .then((result) => {
-        console.log(result);
         const accessToken = result.data; // API 요청하는 콜마다 해더에 accessTocken 담아 보내도록 설정
         instance.defaults.headers.common["Authorization"] = `${accessToken}`;
         setCookie("token", accessToken, 1, "/");
@@ -60,7 +58,6 @@ const signupAPI = (username, password, passwordChecker, emailAddress) => {
     const user = { username, password, passwordChecker, emailAddress };
     console.log(user);
     instance.post("user/signup", user).then((result) => {
-      console.log("가입완료");
       history.push("/login");
       window.alert("회원가입 완료. 환영합니다!");
     });

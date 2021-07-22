@@ -18,7 +18,6 @@ const getProfileImageDB = () => {
   return function (dispatch, getState, { history }) {
     const username = getState().user.user.username;
     instance.get(`user/userprofile/picture/${username}`).then((result) => {
-      console.log("프로필이미지 결과 : ", result.data);
       dispatch(getProfileImage(result.data));
     });
   };
