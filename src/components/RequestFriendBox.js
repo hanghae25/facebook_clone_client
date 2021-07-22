@@ -87,10 +87,7 @@ const RequestFriendWapper = styled.div`
 `;
 
 const RequestFriendImg = styled.div`
-  background: url(${(props) =>
-      props.picture !== ""
-        ? props.picture
-        : "https://mblogthumb-phinf.pstatic.net/20140606_111/sjinwon2_1402052862659ofnU1_PNG/130917_224626.png?type=w2"})
+  background: url(${(props) => props.picture !== "" ? props.picture : "https://mblogthumb-phinf.pstatic.net/20140606_111/sjinwon2_1402052862659ofnU1_PNG/130917_224626.png?type=w2"})
     no-repeat center;
   background-size: 100% 100%;
   -webkit-background-size: 100% 100%;

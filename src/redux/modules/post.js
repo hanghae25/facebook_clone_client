@@ -151,6 +151,7 @@ export default handleActions(
           let idx = draft.my_post_list.findIndex(
             (p) => p.id === action.payload.post_id
           );
+          console.log(idx, state);
           draft.my_post_list[idx].articleLikeItChecker =
             action.payload.post.articleLikeItChecker;
           draft.my_post_list[idx].articleLikeItCount =

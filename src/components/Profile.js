@@ -107,10 +107,7 @@ const ProfileImage = styled.div`
   height: 163px;
   border-radius: 50%;
 
-  background-image: url(${(props) =>
-    props.profileImg
-      ? props.profileImg
-      : "https://mblogthumb-phinf.pstatic.net/20140606_111/sjinwon2_1402052862659ofnU1_PNG/130917_224626.png?type=w2"});
+  background-image: url(${(props) => props.profileImg ? props.profileImg : "https://mblogthumb-phinf.pstatic.net/20140606_111/sjinwon2_1402052862659ofnU1_PNG/130917_224626.png?type=w2"});
 
   background-repeat: no-repeat;
   position: absolute;

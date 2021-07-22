@@ -13,7 +13,7 @@ const ADD_ARTICLE = 'ADD_ARTICLE';
 const GET_ONE_ARTICLE = 'GET_ONE_ARTICLE';
 const initialState = {
   article: {
-    username: '김건우1',
+    username: '유저이름',
     content: '',
   },
   article_list: [],
