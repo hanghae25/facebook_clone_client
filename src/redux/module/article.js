@@ -38,11 +38,16 @@ const addArticleDB = (article) => {
     const pictureParam = picture.join(',');
     const videoParam = video.join(',');
 
+    console.log('picture: ', picture);
+    console.log('addArticle 실행 ');
+
     const param = {
       ...article,
       picture: pictureParam,
       video: videoParam,
     };
+
+    console.log('param : ', param);
     instance
       .post(`/user/article`, param)
       .then((result) => {

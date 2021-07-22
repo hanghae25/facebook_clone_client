@@ -16,6 +16,7 @@ import CommentLike from './modules/commentLike';
 
 // 리듀서 가져오기
 import User from './modules/user';
+import Comment from './modules/comment';
 
 // 브라우저 히스토리
 export const history = createBrowserHistory();
@@ -32,7 +33,7 @@ const rootReducer = combineReducers({
   preview: Preview,
   user: User,
   profile: Profile,
-  commentLike: CommentLike,
+  comment: Comment,
   router: connectRouter(history),
 });
 

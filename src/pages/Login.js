@@ -33,7 +33,7 @@ const Login = (props) => {
     // API로그인을 담당하는 함수를 디스패치했어요.
     dispatch(userActions.loginAPI(emailAddress, password));
   };
-
+  console.log(document.cookie.split("=")[1])
   return (
     <Container>
       <Grid center>
