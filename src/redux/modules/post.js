@@ -57,18 +57,6 @@ const getOnePostDB = (articleId) => {
       if(!_post) {
         return
       }
-      let post = Object.keys(_post).reduce(
-        (acc, cur) => {
-          if (cur.indexOf("user_") !== -1){
-            return{
-              ...acc,
-              username: {...acc.username,[cur]: _post[cur]},
-            };
-          }
-        return {...acc, [cur]: _post[cur]};
-        },
-        {id: result.id, username:{}}
-      );
       dispatch(setOnePost(result.data.content));
     })
     .catch((err)=> {
