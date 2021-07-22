@@ -1,12 +1,12 @@
-import { createAction, handleActions } from 'redux-actions';
-import { produce } from 'immer';
-import instance from '../../shared/config';
+import { createAction, handleActions } from "redux-actions";
+import { produce } from "immer";
+import instance from "../../shared/config";
 
 // action type
-const SET_MY_POST = 'SET_MY_POST';
-const SET_ALL_POST = 'SET_ALL_POST';
-const LIKE_TOGGLE = 'LIKE_TOGGLE';
-const DELETE_POST = 'DELETE_POST';
+const SET_MY_POST = "SET_MY_POST";
+const SET_ALL_POST = "SET_ALL_POST";
+const LIKE_TOGGLE = "LIKE_TOGGLE";
+const DELETE_POST = "DELETE_POST";
 
 // action creator
 const setMyPost = createAction(SET_MY_POST, (post_list) => ({ post_list }));
@@ -39,7 +39,7 @@ const getMyPostDB = () => {
         dispatch(setMyPost(result.data.content));
       })
       .catch((err) => {
-        console.log('에러: ', err);
+        console.log("에러: ", err);
       });
   };
 };
@@ -53,7 +53,7 @@ const getAllPostDB = () => {
         dispatch(setAllPost(result.data.content));
       })
       .catch((err) => {
-        console.log('에러: ', err);
+        console.log("에러: ", err);
       });
   };
 };
@@ -63,39 +63,13 @@ const deletePostDB = (articleId) => {
     instance.delete(`user/article/${articleId}`).then(() => {
       dispatch(getMyPostDB());
       dispatch(getAllPostDB());
-      console.log('삭제완료');
+      console.log("삭제완료");
     });
   };
 };
 
 const toggleLikeDB = (post_id) => {
   return function (dispatch, getState) {
-<<<<<<< HEAD
-    const _idx = getState().post.all_post_list.findIndex(
-      (p) => p.id === post_id
-    );
-    let _post = getState().post.all_post_list[_idx];
-    let username1 = getState().user.user.username;
-    let articleLikeItCount = _post.articleLikeItCount;
-    let articleLikeItChecker = _post.articleLikeItChecker;
-    instance
-      .post("/user/article/likeIt", {
-        articleId: post_id,
-        username: username1,
-      })
-      .then((response) => {
-        articleLikeItChecker = articleLikeItChecker === false ? true : false;
-        articleLikeItCount =
-          articleLikeItChecker === true
-            ? articleLikeItCount + 1
-            : articleLikeItCount - 1;
-        const like_post = {
-          articleLikeItCount: articleLikeItCount,
-          articleLikeItChecker: articleLikeItChecker,
-        };
-        dispatch(likeToggle(like_post, post_id));
-      });
-=======
     if (getState().post.all_post_list.length !== 0) {
       const _idx = getState().post.all_post_list.findIndex(
         (p) => p.id === post_id
@@ -105,7 +79,7 @@ const toggleLikeDB = (post_id) => {
       let articleLikeItCount = _post.articleLikeItCount;
       let articleLikeItChecker = _post.articleLikeItChecker;
       instance
-        .post('/user/article/likeIt', {
+        .post("/user/article/likeIt", {
           articleId: post_id,
           username: username1,
         })
@@ -130,7 +104,7 @@ const toggleLikeDB = (post_id) => {
       let articleLikeItCount = _post.articleLikeItCount;
       let articleLikeItChecker = _post.articleLikeItChecker;
       instance
-        .post('/user/article/likeIt', {
+        .post("/user/article/likeIt", {
           articleId: post_id,
           username: username1,
         })
@@ -147,7 +121,6 @@ const toggleLikeDB = (post_id) => {
           dispatch(likeToggle(like_post, post_id));
         });
     }
->>>>>>> aef01b6bc90d56be743b7f4bda9fff641fb4e84f
   };
 };
 

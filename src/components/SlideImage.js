@@ -18,10 +18,7 @@ const SlideImage = (props) => {
           className="banner"
           spaceBetween={50}
           slidesPerView={1}
-<<<<<<< HEAD
-=======
           //   navigation
->>>>>>> aef01b6bc90d56be743b7f4bda9fff641fb4e84f
           pagination={{ clickable: true }}
         >
           {props.pictureList.map((src) => {
