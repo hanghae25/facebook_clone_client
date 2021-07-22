@@ -22,10 +22,12 @@ const RequestFriendBox = () => {
 
   const acceptFriend = (friendName) => {
     dispatch(friendAction.acceptRequestedFriend(friendName));
+    dispatch(friendAction.getMyFriendListDB());
   };
 
   const declineFriend = (friendName) => {
     dispatch(friendAction.declineRequestedFriend(friendName));
+    dispatch(friendAction.getMyFriendListDB());
   };
   return (
     <RequestFriendContainer>
