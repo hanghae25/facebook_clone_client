@@ -7,31 +7,36 @@ import { actionCreators as commentActions} from "../redux/modules/comment";
 import {useDispatch, useSelector} from "react-redux";
 
 const CommentWrite = (props) => {
+ 
+    const post_id = props.id;
 
+    console.log(props.id)
     const dispatch = useDispatch();
-    const [content, setCommentText] = React.useState();
+    const [content, setContent] = React.useState();
 
         const onChange = (e) => {
-            setCommentText(e.target.value);
+            setContent(e.target.value);
         }
         console.log(content)
 
         const write = () => {
-            dispatch(commentActions.addCommentAPI(content));
-            setCommentText("");
+            console.log("post_id : ",post_id);
+            dispatch(commentActions.addCommentAPI(post_id, content))
+            setContent("");
         }
         console.log(content)
 
     return(
         <React.Fragment>
-            <Grid flex>
+            <Grid flex >
                 <Image shape="circle" src={props.src} />
                 <ReplyInput 
                     placeholder= "  댓글을 입력하세요."
                     onChange={onChange}
+                    value={content}
                     is_Submit/>
                 <PlusReplyButton 
-                    onClick={write}
+                    onClick={()=> {write()}}
                 >게시</PlusReplyButton>  
             </Grid>
         </React.Fragment>

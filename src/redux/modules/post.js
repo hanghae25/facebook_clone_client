@@ -4,12 +4,14 @@ import instance from "../../shared/config";
 
 // action type
 const SET_MY_POST = "SET_MY_POST";
+const SET_ONE_POST = "SET_ONE_POST";
 const SET_ALL_POST = "SET_ALL_POST";
 const LIKE_TOGGLE = "LIKE_TOGGLE";
 const DELETE_POST = "DELETE_POST";
 
 // action creator
 const setMyPost = createAction(SET_MY_POST, (post_list) => ({ post_list }));
+const setOnePost = createAction(SET_ONE_POST, (post_id) => ({ post_id }));
 const setAllPost = createAction(SET_ALL_POST, (post_list) => ({ post_list }));
 
 const likeToggle = createAction(LIKE_TOGGLE, (post, post_id) => ({
@@ -23,6 +25,7 @@ const initialState = {
   my_post_list: [],
   all_post_list: [],
   list: [],
+  this_post: [],
   articleLikeItCount: 0,
   articleLikeItChecker: false,
 };
@@ -44,6 +47,37 @@ const getMyPostDB = () => {
   };
 };
 
+
+const getOnePostDB = (articleId) => {
+  return function (dispatch, getState, {history}){
+    instance
+    .get(`/user/article/${articleId}`)
+    .then((result)=> {
+      let _post = result.data();
+      if(!_post) {
+        return
+      }
+      let post = Object.keys(_post).reduce(
+        (acc, cur) => {
+          if (cur.indexOf("user_") !== -1){
+            return{
+              ...acc,
+              username: {...acc.username,[cur]: _post[cur]},
+            };
+          }
+        return {...acc, [cur]: _post[cur]};
+        },
+        {id: result.id, username:{}}
+      );
+      dispatch(setOnePost(result.data.content));
+    })
+    .catch((err)=> {
+      console.log("에러: ", err);
+    });
+  };
+};
+
+
 const getAllPostDB = () => {
   return function (dispatch, getState, { history }) {
     let username = getState().user.user.username;
@@ -57,7 +91,7 @@ const getAllPostDB = () => {
       });
   };
 };
-
+  
 const deletePostDB = (articleId) => {
   return function (dispatch, getState, { history }) {
     instance.delete(`user/article/${articleId}`).then(() => {
@@ -114,6 +148,21 @@ export default handleActions(
       produce(state, (draft) => {
         draft.my_post_list = action.payload.post_list;
       }),
+    [SET_ONE_POST]: (state,action) =>
+      produce(state,(draft) => {
+        draft.list.push(...action.payload.post_id);
+        draft.list = draft.list.reduce((acc, cur) => {
+          if (acc.findIndex((a) => a.id === cur.id) === -1){
+            return [...acc, cur];
+          }else{
+            acc[acc.findIndex((a) => a.id === cur.id)] = cur;
+            return acc;
+          }
+        }, []);
+        
+      }),
+    
+
     [SET_ALL_POST]: (state, action) =>
       produce(state, (draft) => {
         draft.all_post_list = action.payload.post_list;
@@ -145,6 +194,7 @@ export default handleActions(
 const actionCreators = {
   setMyPost,
   getMyPostDB,
+  getOnePostDB,
   getAllPostDB,
   toggleLikeDB,
   deletePostDB,

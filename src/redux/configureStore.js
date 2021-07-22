@@ -31,6 +31,7 @@ const rootReducer = combineReducers({
   preview: Preview,
   user: User,
   profile: Profile,
+  comment: Comment,
   router: connectRouter(history),
 });
 

@@ -1,14 +1,19 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
+import {useHistory} from 'react-router';
 
 import HeartButton from './HeartButton';
 import { actionCreators as postAction } from '../redux/modules/post';
-
+import { history } from '../redux/configureStore';
+import CommentList from '../pages/CommentList';
+import CommentWrite from './CommentWrite';
+import { commaLists } from 'common-tags';
 // import { Swiper, SwiperSlide } from 'swiper/react';
 
 // Import Swiper styles
 const Post = (props) => {
+  const history = useHistory()
   const dispatch = useDispatch();
   const loginedUser = useSelector((state) => state.user.user.username);
   const {
@@ -22,6 +27,7 @@ const Post = (props) => {
     usernamePicture,
   } = props;
   const pictureList = picture.split(',');
+  console.log(picture)
 
   const handleDeletePost = (id) => {
     dispatch(postAction.deletePostDB(id));
@@ -77,10 +83,15 @@ const Post = (props) => {
           </LikeBtnBox>
           <CommentBtnBox>
             <CommentIcon></CommentIcon>
-            <BottomBoxTxt>댓글 달기</BottomBoxTxt>
+            <BottomBoxTxt 
+              onClick= {()=>{
+                history.push(`/comment/${id}`);
+              }}
+            >댓글 달기</BottomBoxTxt>
           </CommentBtnBox>
         </FeedbackBoxBottom>
       </FeedbackBox>
+
     </PostContainer>
   );
 };
