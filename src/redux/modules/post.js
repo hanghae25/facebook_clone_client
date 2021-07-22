@@ -4,24 +4,30 @@ import instance from "../../shared/config";
 
 // action type
 const SET_MY_POST = "SET_MY_POST";
+const SET_ONE_POST = "SET_ONE_POST";
 const SET_ALL_POST = "SET_ALL_POST";
 const LIKE_TOGGLE = "LIKE_TOGGLE";
 const DELETE_POST = "DELETE_POST";
 
 // action creator
 const setMyPost = createAction(SET_MY_POST, (post_list) => ({ post_list }));
+const setOnePost = createAction(SET_ONE_POST, (post_id) => ({ post_id }));
 const setAllPost = createAction(SET_ALL_POST, (post_list) => ({ post_list }));
 
-const likeToggle = createAction(LIKE_TOGGLE, (post_id, is_like = null) => ({
+const likeToggle = createAction(LIKE_TOGGLE, (post, post_id) => ({
+  post,
   post_id,
-  is_like,
 }));
+const deletePost = createAction(DELETE_POST, (post_id) => ({ post_id }));
 
 // initialState
 const initialState = {
   my_post_list: [],
   all_post_list: [],
   list: [],
+  this_post: [],
+  articleLikeItCount: 0,
+  articleLikeItChecker: false,
 };
 
 const initialPost = {};
@@ -41,6 +47,37 @@ const getMyPostDB = () => {
   };
 };
 
+
+const getOnePostDB = (articleId) => {
+  return function (dispatch, getState, {history}){
+    instance
+    .get(`/user/article/${articleId}`)
+    .then((result)=> {
+      let _post = result.data();
+      if(!_post) {
+        return
+      }
+      let post = Object.keys(_post).reduce(
+        (acc, cur) => {
+          if (cur.indexOf("user_") !== -1){
+            return{
+              ...acc,
+              username: {...acc.username,[cur]: _post[cur]},
+            };
+          }
+        return {...acc, [cur]: _post[cur]};
+        },
+        {id: result.id, username:{}}
+      );
+      dispatch(setOnePost(result.data.content));
+    })
+    .catch((err)=> {
+      console.log("에러: ", err);
+    });
+  };
+};
+
+
 const getAllPostDB = () => {
   return function (dispatch, getState, { history }) {
     let username = getState().user.user.username;
@@ -54,43 +91,51 @@ const getAllPostDB = () => {
       });
   };
 };
-
+  
 const deletePostDB = (articleId) => {
   return function (dispatch, getState, { history }) {
     instance.delete(`user/article/${articleId}`).then(() => {
       dispatch(getMyPostDB());
+      dispatch(getAllPostDB());
       console.log("삭제완료");
     });
   };
 };
-const toggleLikeDB = (post_id, username) => {
+const toggleLikeDB = (post_id) => {
   return function (dispatch, getState) {
-    const _idx = getState().post.list.findIndex((p) => p.id === post_id);
-    let _post = getState().post.list[_idx];
-    let like_cnt = _post.like_cnt;
-    let is_like = _post.is_like;
-
+    const _idx = getState().post.all_post_list.findIndex(
+      (p) => p.id === post_id
+    );
+    console.log(_idx);
+    let _post = getState().post.all_post_list[_idx];
+    console.log(_post);
+    let username1 = getState().user.user.username;
+    let articleLikeItCount = _post.articleLikeItCount;
+    let articleLikeItChecker = _post.articleLikeItChecker;
+    console.log(_idx, _post, articleLikeItCount, articleLikeItChecker);
     instance
-      .post(
-        "/user/article/likeIt",
-        {
-          articleId: post_id,
-          username: "lee",
-        }
-        // { withCredentials: true }
-      )
+      .post("/user/article/likeIt", {
+        articleId: post_id,
+        username: username1,
+      })
       .then((response) => {
-        if (!response.data.res) {
-          window.alert(response.data.msg);
-          return;
-        }
-        is_like = is_like === false ? true : false;
-        like_cnt = is_like === true ? like_cnt + 1 : like_cnt - 1;
-
+        console.log(response);
+        // if (!response.data.articleLikeIt) {
+        //   window.alert(response.data.msg);
+        //   return;
+        // }
+        console.log(_idx, _post, articleLikeItCount, articleLikeItChecker);
+        articleLikeItChecker = articleLikeItChecker === false ? true : false;
+        articleLikeItCount =
+          articleLikeItChecker === true
+            ? articleLikeItCount + 1
+            : articleLikeItCount - 1;
+        console.log(_idx, _post, articleLikeItCount, articleLikeItChecker);
         const like_post = {
-          like_cnt: like_cnt,
-          is_like: is_like,
+          articleLikeItCount: articleLikeItCount,
+          articleLikeItChecker: articleLikeItChecker,
         };
+        console.log(like_post, post_id);
         dispatch(likeToggle(like_post, post_id));
       });
   };
@@ -103,15 +148,43 @@ export default handleActions(
       produce(state, (draft) => {
         draft.my_post_list = action.payload.post_list;
       }),
+    [SET_ONE_POST]: (state,action) =>
+      produce(state,(draft) => {
+        draft.list.push(...action.payload.post_id);
+        draft.list = draft.list.reduce((acc, cur) => {
+          if (acc.findIndex((a) => a.id === cur.id) === -1){
+            return [...acc, cur];
+          }else{
+            acc[acc.findIndex((a) => a.id === cur.id)] = cur;
+            return acc;
+          }
+        }, []);
+        
+      }),
+    
+
     [SET_ALL_POST]: (state, action) =>
       produce(state, (draft) => {
         draft.all_post_list = action.payload.post_list;
       }),
     [LIKE_TOGGLE]: (state, action) =>
       produce(state, (draft) => {
+        let idx = draft.all_post_list.findIndex(
+          (p) => p.id === action.payload.post_id
+        );
+        console.log(idx);
+        console.log(draft.all_post_list[idx]);
+        draft.all_post_list[idx].articleLikeItChecker =
+          action.payload.post.articleLikeItChecker;
+        draft.all_post_list[idx].articleLikeItCount =
+          action.payload.post.articleLikeItCount;
+      }),
+    [DELETE_POST]: (state, action) =>
+      produce(state, (draft) => {
         let idx = draft.list.findIndex((p) => p.id === action.payload.post_id);
-        draft.list[idx].is_like = action.payload.post.is_like;
-        draft.list[idx].like_cnt = action.payload.post.like_cnt;
+        if (idx !== -1) {
+          draft.list.splice(idx, 1);
+        }
       }),
   },
   initialState
@@ -121,6 +194,7 @@ export default handleActions(
 const actionCreators = {
   setMyPost,
   getMyPostDB,
+  getOnePostDB,
   getAllPostDB,
   toggleLikeDB,
   deletePostDB,

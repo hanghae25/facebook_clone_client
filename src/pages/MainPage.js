@@ -13,6 +13,7 @@ const MainPage = () => {
 
   const post_list = useSelector((state) => state.post.all_post_list);
 
+  console.log("post_list : ", post_list);
   React.useEffect(() => {
     dispatch(postAction.getAllPostDB());
   }, []);
@@ -22,11 +23,6 @@ const MainPage = () => {
       <GridBox>
         <Header></Header>
         <PostWrite></PostWrite>
-        {/* <Post></Post>
-        <Post></Post>
-        <Post></Post>
-        <Post></Post>
-        <Post></Post> */}
         <GridWhite>
           {post_list.map((p, idx) => {
             return <Post key={p.id} {...p} />;

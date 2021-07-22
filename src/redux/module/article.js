@@ -10,17 +10,26 @@ import { actionCreators as imageAction } from "./upload";
 
 const SET_ARTICLE = "SET_ARTICLE";
 const ADD_ARTICLE = "ADD_ARTICLE";
-
+const GET_ONE_ARTICLE = "GET_ONE_ARTICLE";
 const initialState = {
   article: {
     username: "유저이름",
     content: "",
   },
   article_list: [],
+  one_article: {},
 };
 
 const setArticle = createAction(SET_ARTICLE, (acticle) => ({ acticle }));
-
+const getOneArticle = createAction(GET_ONE_ARTICLE, (article) => ({ article }));
+const getOneArticleDB = (articleId) => {
+  return function (dispatch, getState, { history }) {
+    instance.get(`user/article/${articleId}`).then((result) => {
+      console.log("result.data : ", result.data);
+      dispatch(getOneArticle(result.data));
+    });
+  };
+};
 const addArticleDB = (article) => {
   return function (dispatch, getState, { history }) {
     const picture = getState().upload.upload_img_url;
@@ -49,6 +58,11 @@ const addArticleDB = (article) => {
 
 export default handleActions(
   {
+    [GET_ONE_ARTICLE]: (state, action) =>
+      produce(state, (draft) => {
+        console.log("action.payload.acticle : ", action.payload.article);
+        draft.one_article = action.payload.article;
+      }),
     [SET_ARTICLE]: (state, action) =>
       produce(state, (draft) => {
         draft.article = action.payload.acticle;
@@ -59,6 +73,7 @@ export default handleActions(
 const actionCreators = {
   setArticle,
   addArticleDB,
+  getOneArticleDB,
 };
 
 export { actionCreators };

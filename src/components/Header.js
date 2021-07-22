@@ -26,7 +26,7 @@ const Header = (props) => {
       </Grid>
       <GridTwo bg="#fff">
         <HomeImg>
-          <HomeImgIcon></HomeImgIcon>
+          <HomeImgIcon onClick={() => history.push("/")}></HomeImgIcon>
         </HomeImg>
         <FriendImg>
           <FriendImgIcon
@@ -156,7 +156,6 @@ const HomeImgIcon = styled.div`
     left: 50%;
     top: 50%;
     transform: translate(-50%,-50%);
-}
 `;
 
 const FriendImg = styled.div`
@@ -177,7 +176,6 @@ background-repeat: no-repeat;
     left: 50%;
     top: 50%;
     transform: translate(-50%,-50%);
-}
 `;
 
 export default Header;
