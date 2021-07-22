@@ -1,24 +1,25 @@
-import React from "react";
-import { Route } from "react-router-dom";
-import PostWrite from "./pages/PostWrite";
-import PostUpdate from "./pages/PostUpdate";
+import React from 'react';
+import { Route } from 'react-router-dom';
+import PostWrite from './pages/PostWrite';
+import PostUpdate from './pages/PostUpdate';
 
-import Search from "./pages/Search";
-import RequestFriend from "./pages/RequestFriend";
-import LoadingSpinner from "../src/components/LoadingSpinner";
-import Login from "./pages/Login";
-import SignUp from "./pages/SignUp";
-import MainPage from "./pages/MainPage";
-import Detail from "./pages/Detail";
+import Search from './pages/Search';
+import RequestFriend from './pages/RequestFriend';
+import LoadingSpinner from '../src/components/LoadingSpinner';
+import Login from './pages/Login';
+import SignUp from './pages/SignUp';
+// import Reply from './pages/Reply';
+import MainPage from './pages/MainPage';
+import Detail from './pages/Detail';
+import CommentList from './pages/CommentList';
 
-import { actionCreators as userAction } from "./redux/modules/user";
-import { useSelector, useDispatch } from "react-redux";
-import CommentList from "./pages/CommentList";
+import { actionCreators as userAction } from './redux/modules/user';
+import { useSelector, useDispatch } from 'react-redux';
 
 function App() {
   const dispatch = useDispatch();
   const loading = useSelector((state) => state.loading.loading);
-  
+
   dispatch(userAction.loginCheck());
 
   return (
@@ -32,6 +33,7 @@ function App() {
       <Route path="/request_friend" component={RequestFriend}></Route>
       <Route path="/login" exact component={Login} />
       <Route path="/signup" exact component={SignUp} />
+      {/* <Route path="/reply" exact component={Reply} /> */}
       <Route path="/comment/:id" component={CommentList} />
 
       <LoadingSpinner isLoading={loading}></LoadingSpinner>
