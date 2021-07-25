@@ -1,15 +1,15 @@
-import React, { useRef, useEffect } from "react";
-import styled from "styled-components";
-import { useSelector, useDispatch } from "react-redux";
+import React, { useRef, useEffect } from 'react';
+import styled from 'styled-components';
+import { useSelector, useDispatch } from 'react-redux';
 import {
   ButtonDefaultCss,
   BlueButtonColor,
   GreyButtonColor,
-} from "../common_css/style";
-import Upload from "../shared/Upload";
-import { actionCreators as uploadAction } from "../redux/module/upload";
-import { actionCreators as profileAction } from "../redux/module/profile";
-import { actionCreators as userAction } from "../redux/modules/user";
+} from '../common_css/style';
+import Upload from '../shared/Upload';
+import { actionCreators as uploadAction } from '../redux/module/upload';
+import { actionCreators as profileAction } from '../redux/module/profile';
+import { actionCreators as userAction } from '../redux/modules/user';
 
 const Profile = () => {
   const profileImg = useSelector((state) => state.profile.profileImg);
@@ -46,14 +46,14 @@ const Profile = () => {
         type="file"
         id="cover"
         accept="image/png, image/gif, image/jpeg"
-        style={{ display: "none" }}
+        style={{ display: 'none' }}
         ref={coverInput}
         onChange={selectCoverFile}
       />
       <label htmlFor="cover">
         <CoverImage coverImg={coverImg}>
           <CoverImageContent>
-            {coverImg.length > 0 || "사진추가"}
+            {coverImg.length > 0 || '사진추가'}
           </CoverImageContent>
         </CoverImage>
       </label>
@@ -63,7 +63,7 @@ const Profile = () => {
         accept="image/png, image/gif, image/jpeg"
         ref={profileInput}
         onChange={selectProfileFile}
-        style={{ display: "none" }}
+        style={{ display: 'none' }}
       />
       <label htmlFor="profile">
         <ProfileImage profileImg={profileImg}>
@@ -87,7 +87,7 @@ const CoverImage = styled.div`
   border-top-left-radius: 18px;
   border-top-right-radius: 18px;
   background-color: #161719;
-  background-image: url(${(props) => (props.coverImg ? props.coverImg : "")});
+  background-image: url(${(props) => (props.coverImg ? props.coverImg : '')});
   height: 214px;
   position: relative;
   background-size: 100% 214px;
@@ -110,7 +110,7 @@ const ProfileImage = styled.div`
   background-image: url(${(props) =>
     props.profileImg
       ? props.profileImg
-      : "https://mblogthumb-phinf.pstatic.net/20140606_111/sjinwon2_1402052862659ofnU1_PNG/130917_224626.png?type=w2"});
+      : 'https://mblogthumb-phinf.pstatic.net/20140606_111/sjinwon2_1402052862659ofnU1_PNG/130917_224626.png?type=w2'});
 
   background-repeat: no-repeat;
   position: absolute;

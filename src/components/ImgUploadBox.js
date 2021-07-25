@@ -1,17 +1,18 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 
-import { actionCreators as imageActions } from "../redux/module/upload";
+import { actionCreators as uploadAction } from "../redux/module/upload";
 import { actionCreators as previewActions } from "../redux/module/preview";
 
-const ImgUploadBox = () => {
+const ImgUploadBox = (props) => {
   const imageInput = useRef();
   const videoInput = useRef();
   const dispatch = useDispatch();
   const imagePreview = useSelector((state) => state.preview.images);
   const videoPreview = useSelector((state) => state.preview.videos);
 
+  const uploadedImageUrl = useSelector((state) => state.upload.upload_img_url);
   const selectImgFile = (e, type) => {
     const reader = new FileReader();
     const file = imageInput.current.files[0];
@@ -38,6 +39,10 @@ const ImgUploadBox = () => {
     // dispatch(imageActions.uploadImageFB(file));
   };
 
+  const handleDeleteUploadedImg = (src) => {
+    dispatch(uploadAction.deleteOneUploadImageUrlList(src));
+  };
+
   const handleDeleteImg = (value) => {
     dispatch(previewActions.deleteOneImagePreview(value));
   };
@@ -45,8 +50,28 @@ const ImgUploadBox = () => {
   const handleDeleteVideo = (value) => {
     dispatch(previewActions.deleteOneVideoPreview(value));
   };
+
+  useEffect(() => {
+    return () => {
+      dispatch(uploadAction.deleteUploadImageUrlList());
+      dispatch(previewActions.deleteAllImagePreview());
+    };
+  }, []);
   return (
     <ImgUploadBoxContainer>
+      {props.type === "update" &&
+        uploadedImageUrl.map((src) => {
+          return (
+            <UploadedImgBox>
+              <UploadedImg src={src}></UploadedImg>
+              <UploadedImgDelete
+                onClick={(src) => {
+                  handleDeleteUploadedImg(src);
+                }}
+              ></UploadedImgDelete>
+            </UploadedImgBox>
+          );
+        })}
       {imagePreview.map(({ preview }) => {
         return (
           <UploadedImgBox>
@@ -171,4 +196,8 @@ const ImgUploadPlus = styled.div`
 const ImgUploadText = styled.div`
   color: #c9ccd3;
 `;
+
+ImgUploadBox.defaultProps = {
+  type: "write",
+};
 export default ImgUploadBox;

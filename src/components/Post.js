@@ -1,15 +1,18 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useSelector, useDispatch } from 'react-redux';
-import {useHistory} from 'react-router';
-
-import HeartButton from './HeartButton';
-import { actionCreators as postAction } from '../redux/modules/post';
+import { useDispatch, useSelector } from 'react-redux';
 import { history } from '../redux/configureStore';
 import CommentList from '../pages/CommentList';
 import CommentWrite from './CommentWrite';
 import { commaLists } from 'common-tags';
-// import { Swiper, SwiperSlide } from 'swiper/react';
+
+import HeartButton from './HeartButton';
+import SlideImage from './SlideImage';
+import { actionCreators as postAction } from '../redux/modules/post';
+
+import { actionCreators as articleAction } from '../redux/module/article';
+
+import { useHistory } from 'react-router-dom';
 
 // Import Swiper styles
 const Post = (props) => {
@@ -49,17 +52,19 @@ const Post = (props) => {
         </PostHeaderInfo>
         {loginedUser === username && (
           <PostControll>
-            <PostUpdate>수정</PostUpdate> /{" "}
-            <PostDelete onClick={() => handleDeletePost(id)}>삭제</PostDelete>
+            <PostUpdate
+              onClick={() => {
+                dispatch(articleAction.getOneArticleDB(id));
+              }}
+            >
+              수정
+            </PostUpdate>{' '}
+            / <PostDelete onClick={() => handleDeletePost(id)}>삭제</PostDelete>
           </PostControll>
         )}
       </PostHeader>
       <PostContent>{content}</PostContent>
-      <PostImage src={pictureList[0]}></PostImage>
-      {/* {pictureList.map((src) => {
-        return <PostImage src={src}></PostImage>;
-      })} */}
-
+      <SlideImage pictureList={pictureList}></SlideImage>
       <FeedbackBox>
         <FeedbackBoxTop>
           <FeedbackLikeIconBox>

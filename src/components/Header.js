@@ -1,8 +1,8 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react';
+import styled from 'styled-components';
 
-import { HeadearColor, ButtonDefaultCss } from "../common_css/style";
-import { useHistory } from "react-router-dom";
+import { HeadearColor, ButtonDefaultCss } from '../common_css/style';
+import { useHistory } from 'react-router-dom';
 
 const Header = (props) => {
   // const mainLogo = facebook;
@@ -12,25 +12,29 @@ const Header = (props) => {
     <React.Fragment>
       <Grid>
         <HeaderLogoBox>
-          <HeaderLogo onClick={() => history.push("/detail")}></HeaderLogo>
+          <HeaderLogo
+            onClick={() => {
+              history.push('/detail');
+            }}
+          ></HeaderLogo>
         </HeaderLogoBox>
         <SearchBox>
-          <Search onClick={() => history.push("/search")}>
+          <Search onClick={() => history.push('/search')}>
             <SearchInner></SearchInner>
             <SearchInnerTxt>검색</SearchInnerTxt>
           </Search>
         </SearchBox>
-        <CameraIconBox onClick={() => history.push("/post_write")}>
+        <CameraIconBox onClick={() => history.push('/post_write')}>
           <CameraIcon></CameraIcon>
         </CameraIconBox>
       </Grid>
       <GridTwo bg="#fff">
         <HomeImg>
-          <HomeImgIcon onClick={() => history.push("/")}></HomeImgIcon>
+          <HomeImgIcon onClick={() => history.push('/')}></HomeImgIcon>
         </HomeImg>
         <FriendImg>
           <FriendImgIcon
-            onClick={() => history.push("/request_friend")}
+            onClick={() => history.push('/request_friend')}
           ></FriendImgIcon>
         </FriendImg>
       </GridTwo>
@@ -46,7 +50,7 @@ const Grid = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  ${(props) => (props.bg ? `background-color: ${props.bg}` : "")};
+  ${(props) => (props.bg ? `background-color: ${props.bg}` : '')};
 `;
 
 const SearchBox = styled.div`
@@ -63,7 +67,7 @@ const Search = styled.a`
 `;
 
 const SearchInner = styled.span`
-  background-image: url("https://static.xx.fbcdn.net/rsrc.php/v3/y-/r/vrr3rrLnK-r.png");
+  background-image: url('https://static.xx.fbcdn.net/rsrc.php/v3/y-/r/vrr3rrLnK-r.png');
   background-size: 31px 1096px;
   background-repeat: no-repeat;
   background-position: 0 -960px;
@@ -93,7 +97,7 @@ const CameraIconBox = styled.div`
 `;
 
 const CameraIcon = styled.div`
-  background-image: url("https://static.xx.fbcdn.net/rsrc.php/v3/y-/r/vrr3rrLnK-r.png");
+  background-image: url('https://static.xx.fbcdn.net/rsrc.php/v3/y-/r/vrr3rrLnK-r.png');
   background-repeat: no-repeat;
   background-size: 31px 1096px;
   background-position: 0 -338px;
@@ -110,7 +114,7 @@ const GridTwo = styled.div`
   flex: auto;
   align-items: center;
   justify-content: stretch;
-  ${(props) => (props.bg ? `background-color: ${props.bg}` : "")};
+  ${(props) => (props.bg ? `background-color: ${props.bg}` : '')};
 `;
 
 const HeaderLogoBox = styled.div`
@@ -122,7 +126,7 @@ const HeaderLogoBox = styled.div`
 `;
 
 const HeaderLogo = styled.div`
-  background-image: url("https://static.xx.fbcdn.net/rsrc.php/v3/y-/r/vrr3rrLnK-r.png");
+  background-image: url('https://static.xx.fbcdn.net/rsrc.php/v3/y-/r/vrr3rrLnK-r.png');
   background-repeat: no-repeat;
   background-size: 31px 1096px;
   background-position: 0 -821px;
@@ -136,7 +140,7 @@ const HomeImg = styled.div`
   height: 40px;
   position: relative;
   &:after {
-    content: "";
+    content: '';
     position: absolute;
     bottom: 0;
     border: 1px solid #2a5fde;
@@ -145,17 +149,17 @@ const HomeImg = styled.div`
 `;
 
 const HomeImgIcon = styled.div`
-  background-image: url("https://static.xx.fbcdn.net/rsrc.php/v3/y-/r/vrr3rrLnK-r.png");
+  background-image: url('https://static.xx.fbcdn.net/rsrc.php/v3/y-/r/vrr3rrLnK-r.png');
   background-repeat: no-repeat;
   background-size: 31px 1096px;
   background-position: 0 -695px;
   display: inline-block;
   width: 20px;
   height: 20px;
-      position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%,-50%);
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
 `;
 
 const FriendImg = styled.div`
@@ -165,17 +169,17 @@ const FriendImg = styled.div`
 `;
 
 const FriendImgIcon = styled.div`
-  background-image: url("https://static.xx.fbcdn.net/rsrc.php/v3/y-/r/vrr3rrLnK-r.png");
-background-repeat: no-repeat;
-    background-size: 31px 1096px;
-    background-position: 0 -422px;
+  background-image: url('https://static.xx.fbcdn.net/rsrc.php/v3/y-/r/vrr3rrLnK-r.png');
+  background-repeat: no-repeat;
+  background-size: 31px 1096px;
+  background-position: 0 -422px;
   display: inline-block;
   width: 20px;
   height: 20px;
-      position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%,-50%);
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
 `;
 
 export default Header;

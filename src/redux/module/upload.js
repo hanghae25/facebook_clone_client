@@ -5,6 +5,9 @@ import { storage } from "../../shared/firebase";
 import { actionCreators as actionLoading } from "./loading";
 import { actionCreators as articleAction } from "./article";
 import { actionCreators as profileAction } from "./profile";
+import { actionCreators as postAction } from "../modules/post";
+import { actionCreators as previewAction } from "./preview";
+
 import instance from "../../shared/config";
 
 const GET_UPLOAD_IMAGE_URL_LIST = "GET_UPLOAD_IMAGE_URL_LIST";
@@ -37,7 +40,7 @@ const deleteOneUploadImageUrlList = createAction(
 );
 const deleteUploadImageUrlList = createAction(DELETE_UPLOAD_IMAGE_URL_LIST);
 
-const uploadImageFB = (article) => {
+const uploadImageFB = (type) => {
   return function (dispatch, getState, { history }) {
     const preview = getState().preview;
     let article = getState().article.article;
@@ -57,17 +60,29 @@ const uploadImageFB = (article) => {
           _upload.then((snapshot) => {
             snapshot.ref.getDownloadURL().then((url) => {
               if (key === "images") {
+                dispatch(previewAction.deleteAllImagePreview());
+
                 dispatch(setUploadImageUrlList(url));
               } else if (key === "videos") {
                 dispatch(setUploadVideoUrlList(url));
               }
-              dispatch(articleAction.addArticleDB(article));
             });
           });
         });
       }
+      setTimeout(() => {
+        if (type === "add") {
+          dispatch(articleAction.addArticleDB(article));
+        } else {
+          dispatch(articleAction.updateArticleDB(article));
+        }
+      }, 4000);
     } else {
-      dispatch(articleAction.addArticleDB(article));
+      if (type === "add") {
+        dispatch(articleAction.addArticleDB(article));
+      } else {
+        dispatch(articleAction.updateArticleDB(article));
+      }
     }
   };
 };
@@ -81,12 +96,11 @@ const uploadProfileImg = (file) => {
 
     _upload.then((snapshot) => {
       snapshot.ref.getDownloadURL().then((url) => {
-        console.log("url : ", url);
         const param = { picture: url, username };
         instance.put("user/userprofile/picture", param).then((result) => {
-          console.log("프로필 이미지 업로드완료");
           dispatch(profileAction.getProfileImage(url));
           dispatch(actionLoading.setLoading(false));
+          dispatch(postAction.getMyPostDB());
         });
       });
     });
@@ -101,10 +115,8 @@ const uploadCoverImg = (file) => {
     let username = getState().user.user.username;
     _upload.then((snapshot) => {
       snapshot.ref.getDownloadURL().then((url) => {
-        console.log("url : ", url);
         const param = { cover: url, username };
         instance.put("user/userprofile/cover", param).then((result) => {
-          console.log("커버 이미지 업로드완료");
           dispatch(profileAction.getCoverImage(url));
           dispatch(actionLoading.setLoading(false));
         });

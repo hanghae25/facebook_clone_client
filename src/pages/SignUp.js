@@ -22,12 +22,6 @@ const SignUp = (props) => {
   const [passwordChecker, setPwdCheck] = React.useState("");
 
   const signup = () => {
-    // console.log(username)
-    // console.log(emailAddress)
-    // console.log(password)
-    // console.log(passwordChecker)
-
-    // 공백 방지
     if (
       username === "" ||
       emailAddress === "" ||

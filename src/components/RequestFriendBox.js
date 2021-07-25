@@ -12,8 +12,6 @@ const RequestFriendBox = () => {
     (state) => state.friend.requested_friend_list
   );
 
-  console.log("requestedFriendList : ", requestedFriendList);
-
   const myFriendList = useSelector((state) => state.friend.my_friend_list);
   const dispatch = useDispatch();
 
@@ -24,10 +22,12 @@ const RequestFriendBox = () => {
 
   const acceptFriend = (friendName) => {
     dispatch(friendAction.acceptRequestedFriend(friendName));
+    dispatch(friendAction.getMyFriendListDB());
   };
 
   const declineFriend = (friendName) => {
     dispatch(friendAction.declineRequestedFriend(friendName));
+    dispatch(friendAction.getMyFriendListDB());
   };
   return (
     <RequestFriendContainer>
@@ -89,10 +89,7 @@ const RequestFriendWapper = styled.div`
 `;
 
 const RequestFriendImg = styled.div`
-  background: url(${(props) =>
-      props.picture !== ""
-        ? props.picture
-        : "https://mblogthumb-phinf.pstatic.net/20140606_111/sjinwon2_1402052862659ofnU1_PNG/130917_224626.png?type=w2"})
+  background: url(${(props) => props.picture !== "" ? props.picture : "https://mblogthumb-phinf.pstatic.net/20140606_111/sjinwon2_1402052862659ofnU1_PNG/130917_224626.png?type=w2"})
     no-repeat center;
   background-size: 100% 100%;
   -webkit-background-size: 100% 100%;
